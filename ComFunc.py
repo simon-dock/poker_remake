@@ -32,26 +32,6 @@ def check_data_what():
 
     return value_int
 
-#入力された文字がq," ",数字か判断する
-def check_data_qc():
-
-    Correct_Flag = True
-
-    while(Correct_Flag):
-
-        tmp_box = input()
-
-        if tmp_box == 'q':
-            value = 'q'
-            Correct_Flag = False
-        elif tmp_box == 'c':
-            value = 'c'
-            Correct_Flag = False
-        else:
-            print("Please enter the number or Q of quit or N of next.")
-
-    return value
-
 #場の最大ベット額を更新する
 def update_max_bet(max_bet, now_bet, past_bet):
     
