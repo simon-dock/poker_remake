@@ -8,6 +8,13 @@ class status(Enum):
     folded = 4
     allin = 5
 
+class Setting():
+
+    def __init__(self):
+        self.sb_value = None
+        self.game_count = None
+
+
 class Player():
     
     def __init__(self):

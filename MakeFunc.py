@@ -27,3 +27,17 @@ def players_data():
 
     print("Players setup is finished.")
     print("")
+
+
+#設定を作成
+def setting_data():
+    
+    print("Set up the game.")
+    print("Enter the amount for small blind.")
+
+    setting = infor.Setting()
+    setting.sb_value = ComFunc.check_data_int()
+
+    print("Small blind is ", setting.sb_value)
+    print("Game setup is finished.")
+    print("")
