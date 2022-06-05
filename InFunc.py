@@ -34,6 +34,7 @@ def between2and6():
 
     return value_int
 
+
 #入力された文字をチェックする
 def what_do(players, now_player, max_bet):
 

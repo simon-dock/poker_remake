@@ -67,10 +67,10 @@ class Player():
         self.cip = 0
 
     def judge_command(self, command, max_bet):
-        if command.isnumeric():
+        if type(command) == int:
             if self.betting + command == max_bet:
                 self.do_call(command)
-            if self.betting + command >= max_bet*1.25:
+            elif self.betting + command >= max_bet*1.25:
                 self.do_raise(command)
         elif command == 'c':
             self.do_check()
