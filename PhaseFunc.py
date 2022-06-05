@@ -2,7 +2,7 @@ import ComFunc
 import InFunc
 import infor
 
-status = infor.status
+status = infor.Status
 position = infor.Position
 
 def preflop(players, setting):
@@ -41,10 +41,7 @@ def preflop(players, setting):
             print("Max bet is $",max_bet)
             
             #入力受付、格納
-            no = InFunc.what_do()
-            
+            command = InFunc.what_do(players, now_player, max_bet)
+            players[now_player].judge_command(command, max_bet)
 
-        print(now_bet)
-        cip_data[cip_index][com.cast_cip(now_player)] = now_bet
         
-        return now_bet

@@ -35,9 +35,10 @@ def between2and6():
     return value_int
 
 #入力された文字をチェックする
-def what_do():
+def what_do(players, now_player, max_bet):
 
     Correct_Flag = True
+    now_bet = players[now_player].betting
 
     while(Correct_Flag):
 
@@ -45,10 +46,14 @@ def what_do():
 
         if tmp_box.isnumeric():
             value = int(tmp_box)
-            Correct_Flag = False
+            if now_bet + value == max_bet:
+                Correct_Flag = False
+            if now_bet + value >= max_bet*1.25:
+                Correct_Flag = False
         elif tmp_box == 'c':
-            value = tmp_box
-            Correct_Flag = False
+            if now_bet == max_bet:
+                value = tmp_box
+                Correct_Flag = False
         elif tmp_box == 'f':
             value = tmp_box
             Correct_Flag = False
