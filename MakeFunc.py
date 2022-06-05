@@ -17,16 +17,15 @@ def players_data():
     print("The number entered is ",players_number)
     print("")
 
-    #参加者の名前を入力する　左隣の人の名前を入力していく
+    #参加者の名前を入力する
+    print("Enter the name of the person.")
     for i in range(players_number):
-        if i == 0:
-            print("Enter the name of the first person.")
-        else:
-            print("Eenter the name of the person to your left.")
         players[i].set_name(input())
 
     print("Players setup is finished.")
     print("")
+
+    return players
 
 
 #設定を作成
@@ -41,3 +40,5 @@ def setting_data():
     print("Small blind is ", setting.sb_value)
     print("Game setup is finished.")
     print("")
+
+    return setting

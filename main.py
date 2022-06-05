@@ -1,5 +1,6 @@
 import DisFunc
 import MakeFunc
+import SysFunc
 import infor
 
 def main():
@@ -8,13 +9,13 @@ def main():
     DisFunc.massege_start() 
 
     #参加者のデータリストを作成
-    MakeFunc.players_data()
+    players = MakeFunc.players_data()
 
     #ゲームの設定を行う
-    MakeFunc.setting_data()
+    setting = MakeFunc.setting_data()
 
     #ポーカーの管理をする
-    #cip_data, cip_index = funcs.manage_poker(name_data, sb_value)
+    SysFunc.poker(players, setting)
 
     #戦績を精算
     #calculate_result(cip_data, cip_index, name_data)

@@ -1,3 +1,4 @@
+from cgitb import small
 from enum import Enum
 
 class status(Enum):
@@ -7,6 +8,14 @@ class status(Enum):
     raised = 3
     folded = 4
     allin = 5
+
+class Position(Enum):
+    dealerbutton = 0
+    smallblind = 1
+    bigblind = 2
+    underthegun = 3
+    highjack = 4
+    cutoff = 5
 
 class Setting():
 
@@ -20,6 +29,7 @@ class Player():
     def __init__(self):
         self.name = None
         self.state = status.waiting
+        self.position = None
         self.betting = 0
         self.log_win = 0
         self.log_join = 0
