@@ -1,21 +1,29 @@
 import ComFunc
+import infor
 
 #プレイヤーデータを作成
 def players_data():
     print("Set up the players.")
 
-    Redo_Flag = True
-    while(Redo_Flag):
-        print("Enter the number of players.")
+    #参加者の人数を入力する
+    print("Enter the number of players.")
 
-        players_number = add_play.input_players_number()
+    players_number = ComFunc.check_data_int()
 
-        name_data = add_play.input_players_name(players_number)
+    players = []
+    for i in range(players_number):
+        players.append(infor.Player())
 
-        Redo_Flag = add_play.confirm_players(name_data)
+    print("The number entered is ",players_number)
+    print("")
 
-        if Redo_Flag == True:
-            print("Redo the players settings.")
+    #参加者の名前を入力する　左隣の人の名前を入力していく
+    for i in range(players_number):
+        if i == 0:
+            print("Enter the name of the first person.")
+        else:
+            print("Eenter the name of the person to your left.")
+        players[i].set_name(input())
 
     print("Players setup is finished.")
     print("")

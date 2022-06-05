@@ -8,10 +8,10 @@ class status(Enum):
     folded = 4
     allin = 5
 
-class Player(Enum):
+class Player():
     
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = None
         self.state = status.waiting
         self.betting = 0
         self.log_win = 0
@@ -19,3 +19,5 @@ class Player(Enum):
         self.log_raise = 0
         self.log_cip = 0
         
+    def set_name(self, name):
+        self.name = name

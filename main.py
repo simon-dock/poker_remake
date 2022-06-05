@@ -11,7 +11,7 @@ def main():
     MakeFunc.players_data()
 
     #ゲームの設定を行う
-    #sb_value = funcs.make_game_setting()
+    MakeFunc.setting_data()
 
     #ポーカーの管理をする
     #cip_data, cip_index = funcs.manage_poker(name_data, sb_value)
