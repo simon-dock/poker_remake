@@ -1,21 +1,13 @@
 import numpy as np
 
-#入力されたデータがint型かチェックする
-def check_data_int():
-    
-    Correct_Flag = True
+#次の添字に入手する
+def get_next_index(players, now_index):
 
-    while(Correct_Flag):
+    next_index = now_index + 1
+    if next_index == len(players):
+        next_index = 0
 
-        tmp_box = input()
-
-        if tmp_box.isnumeric():
-            value_int = int(tmp_box)
-            Correct_Flag = False
-        else:
-            print("Please enter the number.")
-
-    return value_int
+    return next_index
 
 #入力された文字がc,f,数字か判断する
 def check_data_what():
@@ -68,15 +60,7 @@ def update_max_bet(max_bet, now_bet, past_bet):
     
     return max_bet
 
-#次の添字にアクセスする
-def process_next_index(players_number, now_index, cip_data, cip_index):
 
-    next_index = now_index + 1
-    if next_index == players_number:
-        next_index = 0
-        cip_data, cip_index = add_cip_data(cip_data, cip_index, players_number)
-
-    return next_index, cip_data, cip_index
 
 #次のディーラーボタンにアクセスする
 def process_next_dealer(dealer, players_number):

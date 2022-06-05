@@ -2,20 +2,22 @@ from cgitb import small
 from enum import Enum
 
 class status(Enum):
-    waiting = 0
-    cheched = 1
-    called = 2
-    raised = 3
-    folded = 4
-    allin = 5
+    Waiting = 0
+    Blind = 1
+    Cheched = 2
+    Called = 3
+    Raised = 4
+    Folded = 5
+    Allin = 6
 
 class Position(Enum):
-    dealerbutton = 0
-    smallblind = 1
-    bigblind = 2
-    underthegun = 3
-    highjack = 4
-    cutoff = 5
+    DealerButton = 0
+    SmallBlind = 1
+    BigBlind = 2
+    UnderTheGun = 3
+    HighJack = 4
+    CutOff = 5
+ 
 
 class Setting():
 
@@ -28,13 +30,14 @@ class Player():
     
     def __init__(self):
         self.name = None
-        self.state = status.waiting
+        self.status = status.Waiting
         self.position = None
         self.betting = 0
+        self.cip = 100
         self.log_win = 0
         self.log_join = 0
         self.log_raise = 0
-        self.log_cip = 0
+        self.log_cip = []
         
     def set_name(self, name):
         self.name = name

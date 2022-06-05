@@ -1,4 +1,4 @@
-import ComFunc
+import InFunc
 import infor
 
 #プレイヤーデータを作成
@@ -8,7 +8,7 @@ def players_data():
     #参加者の人数を入力する
     print("Enter the number of players.")
 
-    players_number = ComFunc.check_data_int()
+    players_number = InFunc.between2and6()
 
     players = []
     for i in range(players_number):
@@ -35,7 +35,7 @@ def setting_data():
     print("Enter the amount for small blind.")
 
     setting = infor.Setting()
-    setting.sb_value = ComFunc.check_data_int()
+    setting.sb_value = InFunc.int_data()
 
     print("Small blind is ", setting.sb_value)
     print("Game setup is finished.")
