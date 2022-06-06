@@ -5,62 +5,56 @@ import InFunc
 import infor
 
 status = infor.Status
-action = infor.Action
 position = infor.Position
 
 #通常のフェイズの処理
 def run_poker(Redo_Flag, players, setting):
 
-    #フォールド,オールインしていない且つ
-    # standであれば
+    #フォールド,オールインしていない
     if players[setting.turn].status != status.Folded and players[setting.turn].status != status.Allin:
-        if players[setting.turn].action == action.Stand:
 
-            #データの表示
-            print("--------------------")
-            print("Now Player is ",players[setting.turn].name)
-            print("You have         $",players[setting.turn].cip)
-            print("Pot has          $",setting.main_pot)
-            if len(setting.side_pot) >= 1:
-                for i in range(len(setting.side_pot)):
-                    if setting.side_pot[i] != setting.main_pot:
-                        print(players[setting.side_pot_whose[i]].name," pot ","is $",setting.side_pot[i])
-            print("You are betting  $",players[setting.turn].betting)
-            print("Max bet is       $",setting.call_need)
-            print("Minimum raise is $",setting.call_need+setting.raise_before)
-            print("--------------------")
-            
-            #入力受付、格納
-            command = InFunc.what_do(players, setting)
-            players[setting.turn].judge_command(command, setting.call_need)
-            setting.reload_turn_player_status(players[setting.turn].status)
+        #データの表示
+        print("--------------------")
+        print("Now Player is ",players[setting.turn].name)
+        print("You have         $",players[setting.turn].cip)
+        print("Pot has          $",setting.main_pot)
+        if len(setting.side_pot) >= 1:
+            for i in range(len(setting.side_pot)):
+                if setting.side_pot[i] != setting.main_pot:
+                    print(players[setting.side_pot_whose[i]].name," pot ","is $",setting.side_pot[i])
+        print("You are betting  $",players[setting.turn].betting)
+        print("Max bet is       $",setting.call_need)
+        print("Minimum raise is $",setting.call_need+setting.raise_before)
+        print("--------------------")
+        
+        #入力受付、格納
+        command = InFunc.what_do(players, setting)
+        players[setting.turn].judge_command(command, setting.call_need)
+        setting.reload_turn_player_status(players[setting.turn].status)
 
-            #場の最大掛け金の更新 raiseの場合
-            if players[setting.turn].status == status.Raised:
+        #場の最大掛け金の更新 raiseの場合
+        if players[setting.turn].status == status.Raised:
+            before_call_need = setting.call_need
+            setting.reload_call_need(players[setting.turn].betting)
+            setting.raise_before = setting.call_need - before_call_need
+
+        #allinの場合
+        if players[setting.turn].status == status.Allin:
+            if players[setting.turn].betting > setting.call_need:
                 before_call_need = setting.call_need
                 setting.reload_call_need(players[setting.turn].betting)
                 setting.raise_before = setting.call_need - before_call_need
 
-            #allinの場合
-            if players[setting.turn].status == status.Allin:
-                if players[setting.turn].betting > setting.call_need:
-                    before_call_need = setting.call_need
-                    setting.reload_call_need(players[setting.turn].betting)
-                    setting.raise_before = setting.call_need - before_call_need
-
-            #potの計算
-            players, setting = get_pot(players, setting)
+        #potの計算
+        players, setting = get_pot(players, setting)
 
     #次のプレイヤーの添字を取得
     setting.turn = GetFunc.next_index(players, setting.turn)
 
     #次のプレイヤーの掛け金が場の掛け金と同額かつ
-    #Wating状態でなくtaken状態でもなければ終了
+    #Wating状態でなくFold状態でもなければ終了
     if players[setting.turn].betting == setting.call_need:
-        if players[setting.turn].status != status.Waiting and players[setting.turn].action != action.taken:
-            Redo_Flag = False
-        taken_count = GetFunc.action_count(players, action.taken)
-        if taken_count == len(players):
+        if players[setting.turn].status != status.Waiting and players[setting.turn].status != status.Folded:
             Redo_Flag = False
 
     return Redo_Flag, players, setting
@@ -162,12 +156,11 @@ def preflop(players, setting):
 #プリフロップ以外の処理
 def common(players, setting, phase_name):
 
-    #Waitingとtakenの人数を数える
+    #Waitingの人数を数える
     waiting_count = GetFunc.status_count(players, status.Waiting)
-    taken_count = GetFunc.action_count(players, action.taken)
 
     #wating状態が一人の場合この処理を飛ばす
-    if waiting_count == 1 or taken_count == len(players):
+    if waiting_count == 1:
         return players, setting
             
     print("/////////////////")

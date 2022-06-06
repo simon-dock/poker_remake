@@ -82,7 +82,7 @@ class Player():
     def __init__(self):
         self.name = None
         self.status = Status.Waiting
-        self.action = Action.Stand
+        #self.action = Action.Stand
         self.position = None
         self.betting = 0
         self.cip = 100
