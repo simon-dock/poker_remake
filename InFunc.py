@@ -89,14 +89,14 @@ def what_do(players, setting):
 
         if tmp_box.isnumeric():
             value = int(tmp_box)
-            if now_bet + value == setting.max_bet:
+            if now_bet + value == setting.call_need:
                 Correct_Flag = False
-            elif now_bet + value >= setting.max_bet*1.25:
+            elif now_bet + value >= setting.call_need + setting.raise_before:
                 Correct_Flag = False
             else:
                 print("Please enter correct number")
         elif tmp_box == 'c':
-            if now_bet == setting.max_bet:
+            if now_bet == setting.call_need:
                 value = tmp_box
                 Correct_Flag = False
             else:

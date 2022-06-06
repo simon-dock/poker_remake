@@ -1,6 +1,7 @@
 import DisFunc
 import MakeFunc
 import SysFunc
+import WriteFunc
 import infor
 
 def main():
@@ -21,7 +22,7 @@ def main():
     DisFunc.result(players)
 
     #結果をテキストファイルに出力する
-    # export_result()
+    WriteFunc.result(players)
 
 if __name__ == '__main__':
     main()

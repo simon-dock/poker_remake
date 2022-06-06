@@ -34,27 +34,46 @@ class Setting():
         self.sb_value = None
         self.game_count = None
         self.turn = 0
-        self.max_bet = 0
+        self.turn_player_status = Status.Waiting
+        self.min_bet = 0
+        self.call_need = 0
+        self.raise_before = 0
         self.main_pot = 0
-        self.side_pot = 0
+        self.side_pot = []
+        self.side_pot_whose = []
 
     def blind(self):
-        self.max_bet = self.sb_value*2
+        self.call_need = self.sb_value*2
+        self.min_bet = self.call_need
+
+    def reload_turn_player_status(self, status):
+        self.turn_player_status = status
 
     def reload_main_pot(self,sum):
         self.main_pot = sum
 
-    def reload_max_bet(self, new_max):
-        self.max_bet = new_max
+    def reload_side_pot(self,sum, i):
+        self.side_pot[i] = sum
+
+    def make_side_pot(self, sum, turn):
+        self.side_pot.append(sum)
+        self.side_pot_whose.append(turn)
+
+    def reload_call_need(self, new_max):
+        self.call_need = new_max
 
     def cleanup_phase(self):
-        self.max_bet = 0
+        self.turn_player_status = Status.Waiting
+        self.call_need = 0
+        self.raise_before = 0
 
     def cleanup_round(self):
+        self.turn_player_status = Status.Waiting
         self.turn = 0
-        self.max_bet = 0
+        self.call_need = 0
+        self.raise_before = 0
         self.main_pot = 0
-        self.side_pot = 0
+        self.side_pot = []
 
 
 #player１人の情報を持つクラス
@@ -133,7 +152,7 @@ class Player():
     def record_join(self):
         self.log_join += 1
 
-        
+
     #現在まで賭けた金額を出力する
     def export_bet(self):
         sum = 0

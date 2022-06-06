@@ -16,3 +16,11 @@ def status_count(players, status):
         if players[i].status == status:
             count += 1
     return count
+
+#特定の行動の人の数を取得する
+def action_count(players, action):
+    count = 0
+    for i in range(len(players)):
+        if players[i].action == action:
+            count += 1
+    return count
