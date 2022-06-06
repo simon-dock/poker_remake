@@ -17,11 +17,8 @@ def main():
     #ポーカーの管理をする
     players = SysFunc.poker(players, setting)
 
-    #戦績を精算
-    #calculate_result(cip_data, cip_index, name_data)
-
     #結果を表示する
-    # display_result()
+    DisFunc.result(players)
 
     #結果をテキストファイルに出力する
     # export_result()

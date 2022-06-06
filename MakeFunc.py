@@ -3,6 +3,7 @@ import infor
 
 #プレイヤーデータを作成
 def players_data():
+
     print("Set up the players.")
 
     #参加者の人数を入力する

@@ -1,4 +1,4 @@
-import ComFunc
+import GetFunc
 import InFunc
 import infor
 
@@ -20,10 +20,13 @@ def run_poker(Redo_Flag, players, setting):
             setting.reload_main_pot(sum)
 
             #データの表示
-            print("Now    Player is ",players[setting.turn].name)
+            print("--------------------")
+            print("Now Player is ",players[setting.turn].name)
             print("You are betting $",players[setting.turn].betting)
+            print("You have        $",players[setting.turn].cip)
             print("Max bet is      $",setting.max_bet)
-            print("Pot has $",setting.main_pot)
+            print("Pot has         $",setting.main_pot)
+            print("--------------------")
             
             #入力受付、格納
             command = InFunc.what_do(players, setting)
@@ -34,7 +37,7 @@ def run_poker(Redo_Flag, players, setting):
                 setting.reload_max_bet(players[setting.turn].betting)
 
     #次のプレイヤーの添字を取得
-    setting.turn = ComFunc.get_next_index(players, setting.turn)
+    setting.turn = GetFunc.next_index(players, setting.turn)
 
     #次のプレイヤーの掛け金が場の掛け金と同額かつ
     #Wating状態でなくtaken状態でもなければ終了
@@ -62,8 +65,9 @@ def clean_up_round(players, setting):
 #preflopの処理
 def preflop(players, setting):
 
-    print("--------------------")
+    print("/////////////////")
     print("Now it's Preflop.")
+    print("/////////////////")
     print("")
 
     #sb,bbの状態とベットを設定し、次のプレイヤーの添字を入手する
@@ -71,16 +75,19 @@ def preflop(players, setting):
         if players[i].position == position.SmallBlind:
             players[i].status = status.Blind
             players[i].betting = setting.sb_value
+            players[i].cip -= players[i].betting
 
         if players[i].position == position.BigBlind:
             players[i].status = status.Blind
             players[i].betting = setting.sb_value*2
-            setting.turn = ComFunc.get_next_index(players, i)
+            players[i].cip -= players[i].betting
+            setting.turn = GetFunc.next_index(players, i)
 
     if len(players) == 2:
         players[0].status = status.Blind
         players[0].betting = setting.sb_value*2
-        setting.turn = ComFunc.get_next_index(players, 0)
+        players[i].cip -= players[i].betting
+        setting.turn = GetFunc.next_index(players, 0)
 
     setting.blind()
     Redo_Flag = True
@@ -92,10 +99,14 @@ def preflop(players, setting):
 
         #一度もレイズされずbbに回った場合レイズする権利がある
         if players[setting.turn].betting == setting.sb_value*2 and First_Flag == True:
-            if players[setting.turn].position == position.BigBlind:
-                Redo_Flag = True
-                First_Flag = False
+            #何人残っているか確認する
+            fold_count = GetFunc.status_count(players, status.Folded)
+            if fold_count != len(players)-1:
+                if players[setting.turn].position == position.BigBlind:
+                    Redo_Flag = True
+                    First_Flag = False
 
+    
     #フェイズの後処理    
     return clean_up_phase(players, setting) 
 
@@ -104,17 +115,15 @@ def preflop(players, setting):
 def common(players, setting, phase_name):
 
     #Waitingの人数を数える
-    waiting_count = 0
-    for i in range(len(players)):
-        if players[i].status == status.Waiting:
-            waiting_count += 1
+    waiting_count = GetFunc.status_count(players, status.Waiting)
 
     #wating状態が一人の場合この処理を飛ばす
     if waiting_count == 1:
         return players, setting
             
-    print("--------------------")
+    print("/////////////////")
     print("Now it's",phase_name)
+    print("/////////////////")
     print("")
 
     #Smallblindからはじまる
@@ -136,6 +145,7 @@ def showdwon_or_autowin(players, setting):
     waiting_list = []
     fold_list = []
     fold_index = [0 for i in range(len(players))]
+
     for i in range(len(players)):
         if players[i].status == status.Folded:
             fold_list.append(i)
@@ -145,8 +155,10 @@ def showdwon_or_autowin(players, setting):
 
     #allin状態がおらずwaiting状態が一人の場合autowinの処理
     if len(players) - len(fold_list) == 1:
-        print(players[waiting_list[0]].name," is winner!!")
-        players[waiting_list[0]].win(setting.main_pot)
+        winner_index = waiting_list[0]
+        print("Winnner is",players[winner_index].name)
+        print("Get pot $",setting.main_pot)
+        players[winner_index].win(setting.main_pot)
         
     #そうでない場合、showdownを行う
     else:
@@ -155,6 +167,9 @@ def showdwon_or_autowin(players, setting):
                 print(players[i].name," is ", i)
         
         print("Who won?")
-        players[InFunc.winner(fold_index)].win(setting.main_pot)
+        winner_index = InFunc.winner(fold_index)
+        print("Winnner is",players[winner_index].name)
+        print("Get pot $",setting.main_pot)
+        players[winner_index].win(setting.main_pot)
 
     return clean_up_round(players, setting)

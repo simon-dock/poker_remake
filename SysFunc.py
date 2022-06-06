@@ -1,25 +1,26 @@
-from distutils.log import info
-from itertools import count
-from re import I
 import PhaseFunc
 import InFunc
 import infor
 import random
 
 def poker(players, setting):
-    
-    print("--------------------")
+
+    print("#####################")
     print("GAME START")
+    print("")
 
     #dealerbuttonを決め、初期ポジションを決定する
     random.shuffle(players)
     times = 0
+    print("--------------------")
     for i in infor.Position:
         if times == len(players):
             break
         players[times].position = i
-        print(players[times].name,players[times].position)
+        print(players[times].name,players[times].position.name)
         times += 1
+    print("--------------------")
+    print("")
 
 
     End_Flag = True
@@ -48,7 +49,8 @@ def poker(players, setting):
             players[i].position = players[i+1].position
         players[len(players)-1].position = tmp_position
 
-    print("--------------------")
+    print("#####################")
     print("GAME OVER")
+    print("")
 
     return players
