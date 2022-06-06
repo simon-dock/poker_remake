@@ -50,3 +50,5 @@ def poker(players, setting):
 
     print("--------------------")
     print("GAME OVER")
+
+    return players

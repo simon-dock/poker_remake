@@ -13,6 +13,11 @@ class Status(Enum):
     Folded = 5
     Allin = 6
 
+#そのフェイズでの行動状態を列挙
+class Action(Enum):
+    Stand = 0
+    taken = 1
+
 #ポーカーにおける位置を列挙
 class Position(Enum):
     DealerButton = 0
@@ -58,6 +63,7 @@ class Player():
     def __init__(self):
         self.name = None
         self.status = Status.Waiting
+        self.action = Action.Stand
         self.position = None
         self.betting = 0
         self.cip = 100
@@ -140,9 +146,9 @@ class Player():
     #１つのフェイズが終了した際に必要な処理
     def cleanup_phase(self):
         if self.status == Status.Folded or self.status == Status.Allin:
-            if self.betting != -1:
-                self.log_bet.append(self.betting)
-            self.betting = -1
+            self.action = Action.taken
+            self.log_bet.append(self.betting)
+            self.betting = 0
         else:
             self.status = Status.Waiting
             self.log_bet.append(self.betting)
@@ -152,5 +158,6 @@ class Player():
     def cleanup_round(self):
         self.log_cip.append(self.cip)
         self.status = Status.Waiting
+        self.action = Action.Stand
         self.betting = 0
         self.log_bet = []

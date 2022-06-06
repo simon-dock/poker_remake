@@ -3,41 +3,43 @@ import InFunc
 import infor
 
 status = infor.Status
+action = infor.Action
 position = infor.Position
 
 #通常のフェイズの処理
 def run_poker(Redo_Flag, players, setting):
 
-    #フォールドしていなければ
-    if players[setting.turn].status != status.Folded:
+    #フォールド,オールインしていない且つ
+    # standであれば
+    if players[setting.turn].status != status.Folded and players[setting.turn].status != status.Allin:
+        if players[setting.turn].action == action.Stand:
+            #potの計算
+            sum = 0
+            for i in range(len(players)):
+                sum += players[i].export_bet()
+            setting.reload_main_pot(sum)
 
-        #potの計算
-        sum = 0
-        for i in range(len(players)):
-            sum += players[i].export_bet()
-        setting.reload_main_pot(sum)
+            #データの表示
+            print("Now    Player is ",players[setting.turn].name)
+            print("You are betting $",players[setting.turn].betting)
+            print("Max bet is      $",setting.max_bet)
+            print("Pot has $",setting.main_pot)
+            
+            #入力受付、格納
+            command = InFunc.what_do(players, setting)
+            players[setting.turn].judge_command(command, setting.max_bet)
 
-        #データの表示
-        print("Now    Player is ",players[setting.turn].name)
-        print("You are betting $",players[setting.turn].betting)
-        print("Max bet is      $",setting.max_bet)
-        print("Pot has $",setting.main_pot)
-        
-        #入力受付、格納
-        command = InFunc.what_do(players, setting)
-        players[setting.turn].judge_command(command, setting.max_bet)
-
-    #場の最大掛け金の更新
-    if players[setting.turn].status == status.Raised:
-        setting.reload_max_bet(players[setting.turn].betting)
+            #場の最大掛け金の更新
+            if players[setting.turn].status == status.Raised or players[setting.turn].status == status.Allin:
+                setting.reload_max_bet(players[setting.turn].betting)
 
     #次のプレイヤーの添字を取得
     setting.turn = ComFunc.get_next_index(players, setting.turn)
 
     #次のプレイヤーの掛け金が場の掛け金と同額かつ
-    #Wating状態でなれば終了
+    #Wating状態でなくtaken状態でもなければ終了
     if players[setting.turn].betting == setting.max_bet:
-        if players[setting.turn].status != status.Waiting:
+        if players[setting.turn].status != status.Waiting and players[setting.turn].action != action.taken:
             Redo_Flag = False
 
     return Redo_Flag, players, setting
@@ -82,15 +84,17 @@ def preflop(players, setting):
 
     setting.blind()
     Redo_Flag = True
+    First_Flag = True
 
     while(Redo_Flag):
         
         Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
 
         #一度もレイズされずbbに回った場合レイズする権利がある
-        if players[setting.turn].betting == setting.sb_value*2:
+        if players[setting.turn].betting == setting.sb_value*2 and First_Flag == True:
             if players[setting.turn].position == position.BigBlind:
                 Redo_Flag = True
+                First_Flag = False
 
     #フェイズの後処理    
     return clean_up_phase(players, setting) 
@@ -107,7 +111,7 @@ def common(players, setting, phase_name):
 
     #wating状態が一人の場合この処理を飛ばす
     if waiting_count == 1:
-        return players
+        return players, setting
             
     print("--------------------")
     print("Now it's",phase_name)
@@ -142,7 +146,7 @@ def showdwon_or_autowin(players, setting):
     #allin状態がおらずwaiting状態が一人の場合autowinの処理
     if len(players) - len(fold_list) == 1:
         print(players[waiting_list[0]].name," is winner!!")
-        players[waiting_list].win(setting.main_pot)
+        players[waiting_list[0]].win(setting.main_pot)
         
     #そうでない場合、showdownを行う
     else:

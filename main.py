@@ -15,7 +15,7 @@ def main():
     setting = MakeFunc.setting_data()
 
     #ポーカーの管理をする
-    SysFunc.poker(players, setting)
+    players = SysFunc.poker(players, setting)
 
     #戦績を精算
     #calculate_result(cip_data, cip_index, name_data)
