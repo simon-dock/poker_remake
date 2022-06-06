@@ -99,7 +99,8 @@ def what_do(players, setting):
             if now_bet == setting.max_bet:
                 value = tmp_box
                 Correct_Flag = False
-            print("You can not Check")
+            else:
+                print("You can not Check")
         elif tmp_box == 'f':
             value = tmp_box
             Correct_Flag = False

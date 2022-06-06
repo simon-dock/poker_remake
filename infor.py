@@ -128,7 +128,12 @@ class Player():
             self.do_allin()
         else:
             print("error do_command")
+            
+    #フロップに参加した場合を記録する
+    def record_join(self):
+        self.log_join += 1
 
+        
     #現在まで賭けた金額を出力する
     def export_bet(self):
         sum = 0

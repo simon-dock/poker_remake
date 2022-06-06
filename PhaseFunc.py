@@ -22,10 +22,10 @@ def run_poker(Redo_Flag, players, setting):
             #データの表示
             print("--------------------")
             print("Now Player is ",players[setting.turn].name)
-            print("You are betting $",players[setting.turn].betting)
             print("You have        $",players[setting.turn].cip)
-            print("Max bet is      $",setting.max_bet)
             print("Pot has         $",setting.main_pot)
+            print("You are betting $",players[setting.turn].betting)
+            print("Max bet is      $",setting.max_bet)
             print("--------------------")
             
             #入力受付、格納
@@ -106,7 +106,10 @@ def preflop(players, setting):
                     Redo_Flag = True
                     First_Flag = False
 
-    
+    #フロップに参加した人への処理
+    for i in range(len(players)):
+        if players[i].status != status.Folded:
+            players[i].record_join()
     #フェイズの後処理    
     return clean_up_phase(players, setting) 
 
