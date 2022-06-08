@@ -1,8 +1,13 @@
+from typing import List
 import InFunc
 import infor
 
-#プレイヤーデータを作成
-def players_data():
+def players_data()-> List[infor.Player]:
+    """プレイヤーデータを外部からの入力を元に作成
+
+    Returns:
+        players
+    """
 
     print("Set up the players.")
 
@@ -30,13 +35,18 @@ def players_data():
 
 
 #設定を作成
-def setting_data():
+def setting_data()-> infor.Setting:
+    """設定を外部からの入力を元に作成
+
+    Returns:
+        setting
+    """
     
     print("Set up the game.")
     print("Enter the amount for small blind.")
 
     setting = infor.Setting()
-    setting.sb_value = InFunc.int_data()
+    setting.set_sb_value(InFunc.int_data())
 
     print("Small blind is ", setting.sb_value)
     print("Game setup is finished.")

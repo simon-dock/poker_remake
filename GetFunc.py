@@ -1,4 +1,7 @@
-import numpy as np
+import infor
+
+status = infor.Status
+position = infor.Position
 
 #次の添字を取得
 def next_index(players, now_index):
@@ -24,3 +27,12 @@ def action_count(players, action):
         if players[i].action == action:
             count += 1
     return count
+
+#何人残っているかを判断しフラグの状態を取得
+def remain_count(Redo_Flag, players, setting):
+    fold_count = status_count(players, status.Folded)
+    if fold_count == len(players)-1:
+        if players[setting.turn].position == position.BigBlind:
+            Redo_Flag = False
+
+    return Redo_Flag

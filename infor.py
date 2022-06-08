@@ -42,12 +42,24 @@ class Setting():
         self.side_pot = []
         self.side_pot_whose = []
 
-    def blind(self):
-        self.call_need = self.sb_value*2
-        self.min_bet = self.call_need
+    def set_sb_value(self, value):
+        self.sb_value = value
 
+    def set_turn(self, turn):
+        self.turn = turn
+
+    def set_blind(self, turn):
+        self.raise_before = self.sb_value*2
+        self.call_need = self.raise_before
+        self.min_bet = self.call_need
+        self.set_turn(turn)
+
+        
     def reload_turn_player_status(self, status):
         self.turn_player_status = status
+
+    def reload_call_need(self, new_max):
+        self.call_need = new_max
 
     def reload_main_pot(self,sum):
         self.main_pot = sum
@@ -55,12 +67,15 @@ class Setting():
     def reload_side_pot(self,sum, i):
         self.side_pot[i] = sum
 
+    def reload_raise_before(self, betting):
+        before_call_need = self.call_need
+        self.reload_call_need(betting)
+        self.raise_before = self.call_need - before_call_need
+
+
     def make_side_pot(self, sum, turn):
         self.side_pot.append(sum)
         self.side_pot_whose.append(turn)
-
-    def reload_call_need(self, new_max):
-        self.call_need = new_max
 
     def cleanup_phase(self):
         self.turn_player_status = Status.Waiting
@@ -82,7 +97,6 @@ class Player():
     def __init__(self):
         self.name = None
         self.status = Status.Waiting
-        #self.action = Action.Stand
         self.position = None
         self.betting = 0
         self.cip = 100
@@ -99,6 +113,13 @@ class Player():
     #名前を設定する
     def set_name(self, name):
         self.name = name
+
+    #blindについての設定をする
+    def set_blind(self, sb_value):
+        self.status = Status.Blind
+        self.betting = sb_value
+        self.cip -= self.betting
+
 
     #ポジションを設定する
     def set_position(self, name):

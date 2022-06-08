@@ -1,5 +1,6 @@
 from itertools import count
 from operator import setitem
+from typing import List, Tuple
 import GetFunc
 import InFunc
 import infor
@@ -34,17 +35,13 @@ def run_poker(Redo_Flag, players, setting):
 
         #場の最大掛け金の更新 raiseの場合
         if players[setting.turn].status == status.Raised:
-            before_call_need = setting.call_need
-            setting.reload_call_need(players[setting.turn].betting)
-            setting.raise_before = setting.call_need - before_call_need
-
+            setting.reload_raise_before(players[setting.turn].betting)
+            
         #allinの場合
         if players[setting.turn].status == status.Allin:
             if players[setting.turn].betting > setting.call_need:
-                before_call_need = setting.call_need
-                setting.reload_call_need(players[setting.turn].betting)
-                setting.raise_before = setting.call_need - before_call_need
-
+                setting.reload_raise_before(players[setting.turn].betting)
+                
         #potの計算
         players, setting = get_pot(players, setting)
 
@@ -74,7 +71,15 @@ def get_pot(players, setting):
 
     return players, setting
 
-def sum_betting(players):
+def sum_betting(players: List[infor.Player])-> int:
+    """プレイヤーの全員のベットを合計する
+
+    Args:
+        players (list[player]):
+
+    Returns:
+        sum
+    """
     sum = 0
     for i in range(len(players)):
         sum += players[i].export_bet()
@@ -95,36 +100,39 @@ def clean_up_round(players, setting):
         players[i].cleanup_round()
     return players, setting
 
-#preflopの処理
-def preflop(players, setting):
+
+def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player],infor.Setting]:
+    """プリフロップの処理
+        ・sb,bbの設定
+        ・bbのレイズの処理
+        ・フロップへの参加者をカウント
+
+    Args:
+        players (List[infor.Player]):
+        setting (infor.Setting):
+
+    Returns:
+        Tuple[List[infor.Player],infor.Setting]: 
+    """
 
     print("/////////////////")
     print("Now it's Preflop.")
     print("/////////////////")
     print("")
 
-    #sb,bbの状態とベットを設定し、次のプレイヤーの添字を入手する
+    #sb,bbの状態とベット,ターンプレイヤーを設定
     for i in range(len(players)):
         if players[i].position == position.SmallBlind:
-            players[i].status = status.Blind
-            players[i].betting = setting.sb_value
-            players[i].cip -= players[i].betting
+            players[i].set_blind(setting.sb_value)
 
         if players[i].position == position.BigBlind:
-            players[i].status = status.Blind
-            players[i].betting = setting.sb_value*2
-            players[i].cip -= players[i].betting
-            setting.raise_before = players[i].betting
-            setting.turn = GetFunc.next_index(players, i)
+            players[i].set_blind(setting.sb_value*2)
+            setting.set_blind(GetFunc.next_index(players, i))
 
     if len(players) == 2:
-        players[0].status = status.Blind
-        players[0].betting = setting.sb_value*2
-        players[i].cip -= players[i].betting
-        setting.raise_before = players[i].betting
-        setting.turn = GetFunc.next_index(players, 0)
+        players[0].set_blind(setting.sb_value*2)
+        setting.set_blind(GetFunc.next_index(players, 0))
 
-    setting.blind()
     Redo_Flag = True
     First_Flag = True
 
@@ -134,15 +142,14 @@ def preflop(players, setting):
     while(Redo_Flag):
         
         Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
-
+        
         #一度もレイズされずbbに回った場合レイズする権利がある
         if players[setting.turn].betting == setting.sb_value*2 and First_Flag == True:
-            #何人残っているか確認する
-            fold_count = GetFunc.status_count(players, status.Folded)
-            if fold_count != len(players)-1:
-                if players[setting.turn].position == position.BigBlind:
-                    Redo_Flag = True
-                    First_Flag = False
+            Redo_Flag = True
+            First_Flag = False
+
+        #何人残っているか確認する
+        Redo_Flag = GetFunc.remain_count(Redo_Flag, players, setting)
 
     #フロップに参加した人への処理
     for i in range(len(players)):
@@ -154,13 +161,23 @@ def preflop(players, setting):
 
 
 #プリフロップ以外の処理
-def common(players, setting, phase_name):
+def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> Tuple[List[infor.Player],infor.Setting]:
+    """ゲーム共通の処理
 
-    #Waitingの人数を数える
+    Args:
+        players (List[infor.Player]): 
+        setting (infor.Setting):
+        phase_name (str):
+
+    Returns:
+        Tuple[List[infor.Player],infor.Setting]:
+    """
+
+    #Wfoldとallinの人数を数える
     waiting_count = GetFunc.status_count(players, status.Waiting)
 
-    #wating状態が一人の場合この処理を飛ばす
-    if waiting_count == 1:
+    #wating状態が一人以下の場合この処理を飛ばす
+    if waiting_count  <= 1:
         return players, setting
             
     print("/////////////////")
@@ -171,12 +188,14 @@ def common(players, setting, phase_name):
     #Smallblindからはじまる
     for i in range(len(players)):
         if players[i].position == position.SmallBlind:
-            setting.turn = i
+            setting.set_turn(i)
 
     Redo_Flag = True
 
     while(Redo_Flag):
         Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
+        #何人残っているか確認する
+        Redo_Flag = GetFunc.remain_count(Redo_Flag, players, setting)
 
     return  clean_up_phase(players, setting) 
 
