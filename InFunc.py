@@ -89,26 +89,32 @@ def what_do(players, setting):
 
         if tmp_box.isnumeric():
             value = int(tmp_box)
-            if now_bet + value == setting.call_need:
-                Correct_Flag = False
-            elif now_bet + value >= setting.call_need + setting.raise_before:
+            if now_bet + value >= setting.call_need + setting.raise_before:
                 Correct_Flag = False
             else:
                 print("Please enter correct number")
-        elif tmp_box == 'c':
-            if now_bet == setting.call_need:
+
+        else:
+            if tmp_box == 't':
+                if now_bet == setting.call_need:
+                    value = tmp_box
+                    Correct_Flag = False
+                else:
+                    print("You can not Check")
+            elif tmp_box == 'c':
+                if now_bet != setting.call_need:
+                    value = tmp_box
+                    Correct_Flag = False
+                else:
+                    print("You can not Call")
+            elif tmp_box == 'f':
+                value = tmp_box
+                Correct_Flag = False
+            elif tmp_box == 'allin':
                 value = tmp_box
                 Correct_Flag = False
             else:
-                print("You can not Check")
-        elif tmp_box == 'f':
-            value = tmp_box
-            Correct_Flag = False
-        elif tmp_box == 'allin':
-            value = tmp_box
-            Correct_Flag = False
-        else:
-            print("Please enter the number")
-            print("or C of check or F of fold or allin.")
+                print("Please enter the number or C of call")
+                print("or T of check or F of fold or allin.")
 
     return value

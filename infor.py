@@ -1,6 +1,7 @@
 from asyncio import start_unix_server
 from cgitb import small
 from enum import Enum
+from nis import match
 from re import S
 
 #状態を列挙
@@ -126,10 +127,11 @@ class Player():
         self.position = name
 
     #callを行った場合の処理
-    def do_call(self, value):
+    def do_call(self, call_need):
         self.status = Status.Called
-        self.betting += value
-        self.cip -= value
+        tmp_box = call_need - self.betting
+        self.betting += tmp_box
+        self.cip -= tmp_box
 
     #raiseを行った場合の処理
     def do_raise(self, value):
@@ -154,13 +156,12 @@ class Player():
         self.cip = 0
 
     #命令を判断する
-    def judge_command(self, command, max_bet):
+    def judge_command(self, command, call_need):
         if type(command) == int:
-            if self.betting + command == max_bet:
-                self.do_call(command)
-            elif self.betting + command >= max_bet*1.25:
-                self.do_raise(command)
+            self.do_raise(command)
         elif command == 'c':
+            self.do_call(call_need)
+        elif command == 't':
             self.do_check()
         elif command == 'f':
             self.do_Fold()

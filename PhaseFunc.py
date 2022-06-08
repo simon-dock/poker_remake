@@ -1,5 +1,7 @@
+from distutils.log import info
 from itertools import count
 from operator import setitem
+from tkinter import Place
 from typing import List, Tuple
 import GetFunc
 import InFunc
@@ -8,8 +10,18 @@ import infor
 status = infor.Status
 position = infor.Position
 
-#通常のフェイズの処理
-def run_poker(Redo_Flag, players, setting):
+
+def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)->Tuple[bool, List[infor.Player], infor.Setting]:
+    """通常フェイズの処理
+
+    Args:
+        Redo_Flag (bool):
+        players (List[infor.Player]): 
+        setting (infor.Setting): 
+
+    Returns:
+        Tuple[bool, List[infor.Player], infor.Setting]:
+    """
 
     #フォールド,オールインしていない
     if players[setting.turn].status != status.Folded and players[setting.turn].status != status.Allin:
@@ -57,8 +69,16 @@ def run_poker(Redo_Flag, players, setting):
     return Redo_Flag, players, setting
 
 
-#potを計算する
-def get_pot(players, setting):
+def get_pot(players:List[infor.Player], setting:infor.Setting)->Tuple[List[infor.Player], infor.Setting]:
+    """potを計算する
+
+    Args:
+        players (List[infor.Player]): 
+        setting (infor.Setting): 
+
+    Returns:
+        Tuple[List[infor.Player], infor.Setting]:
+    """
 
     if len(setting.side_pot) != 0:
         for i in range(len(setting.side_pot)): 
@@ -70,6 +90,7 @@ def get_pot(players, setting):
     setting.reload_main_pot(sum_betting(players))
 
     return players, setting
+    
 
 def sum_betting(players: List[infor.Player])-> int:
     """プレイヤーの全員のベットを合計する
@@ -87,14 +108,32 @@ def sum_betting(players: List[infor.Player])-> int:
     return sum
 
 #フェイズの後処理
-def clean_up_phase(players, setting):
+def clean_up_phase(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player], infor.Setting]:
+    """フェイズの後処理
+
+    Args:
+        players (List[infor.Player]):
+        setting (infor.Setting): 
+
+    Returns:
+        Tuple[List[infor.Player], infor.Setting]:
+    """
     setting.cleanup_phase()
     for i in range(len(players)):
         players[i].cleanup_phase()
     return players, setting
 
-#ラウンドの後処理
-def clean_up_round(players, setting):
+
+def clean_up_round(players:List[infor.Player], setting:infor.Setting)->Tuple[List[infor.Player], infor.Setting]:
+    """ラウンドの後処理
+
+    Args:
+        players (List[infor.Player]): 
+        setting (infor.Setting): 
+
+    Returns:
+        Tuple[List[infor.Player], infor.Setting]: 
+    """
     setting.cleanup_round()
     for i in range(len(players)):
         players[i].cleanup_round()
@@ -160,7 +199,6 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
     return clean_up_phase(players, setting) 
 
 
-#プリフロップ以外の処理
 def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> Tuple[List[infor.Player],infor.Setting]:
     """ゲーム共通の処理
 
@@ -201,7 +239,16 @@ def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> 
 
 
 
-def showdwon_or_autowin(players, setting):
+def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player], infor.Setting]:
+    """ショウダウンか自動勝利
+
+    Args:
+        players (List[infor.Player]): 
+        setting (infor.Setting): 
+
+    Returns:
+        Tuple[List[infor.Player], infor.Setting]: 
+    """
     #foldの人数を数える
     waiting_list = []
     allin_list = []
