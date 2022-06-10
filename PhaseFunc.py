@@ -22,7 +22,6 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
     Returns:
         Tuple[bool, List[infor.Player], infor.Setting]:
     """
-
     #フォールド,オールインしていない
     if players[setting.turn].status != status.Folded and players[setting.turn].status != status.Allin:
 
@@ -31,10 +30,6 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
         print("Now Player is ",players[setting.turn].name)
         print("You have         $",players[setting.turn].cip)
         print("Pot has          $",setting.main_pot)
-        if len(setting.side_pot) >= 1:
-            for i in range(len(setting.side_pot)):
-                if setting.side_pot[i] != setting.main_pot:
-                    print(players[setting.side_pot_whose[i]].name," pot ","is $",setting.side_pot[i])
         print("You are betting  $",players[setting.turn].betting)
         print("Max bet is       $",setting.call_need)
         print("Minimum raise is $",setting.call_need+setting.raise_before)
@@ -43,22 +38,25 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
         #入力受付、格納
         command = InFunc.what_do(players, setting)
         players[setting.turn].judge_command(command, setting.call_need)
-        setting.reload_turn_player_status(players[setting.turn].status)
+        setting.set_turn_player_status(players[setting.turn].status)
+   
 
         #場の最大掛け金の更新 raiseの場合
         if players[setting.turn].status == status.Raised:
-            setting.reload_raise_before(players[setting.turn].betting)
+            setting.update_raise_before(players[setting.turn].betting)
             
         #allinの場合
         if players[setting.turn].status == status.Allin:
             if players[setting.turn].betting > setting.call_need:
-                setting.reload_raise_before(players[setting.turn].betting)
-                
+                setting.update_raise_before(players[setting.turn].betting)
+        
         #potの計算
         players, setting = get_pot(players, setting)
 
+
     #次のプレイヤーの添字を取得
     setting.turn = GetFunc.next_index(players, setting.turn)
+
 
     #次のプレイヤーの掛け金が場の掛け金と同額かつ
     #Wating状態でなくFold状態でもなければ終了
@@ -80,17 +78,10 @@ def get_pot(players:List[infor.Player], setting:infor.Setting)->Tuple[List[infor
         Tuple[List[infor.Player], infor.Setting]:
     """
 
-    if len(setting.side_pot) != 0:
-        for i in range(len(setting.side_pot)): 
-            setting.reload_side_pot(sum_betting(players),i)
-        
-    if setting.turn_player_status == status.Allin:
-        setting.make_side_pot(sum_betting(players), setting.turn)
- 
-    setting.reload_main_pot(sum_betting(players))
+    setting.set_main_pot(sum_betting(players))
 
     return players, setting
-    
+
 
 def sum_betting(players: List[infor.Player])-> int:
     """プレイヤーの全員のベットを合計する
@@ -107,7 +98,6 @@ def sum_betting(players: List[infor.Player])-> int:
 
     return sum
 
-#フェイズの後処理
 def clean_up_phase(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player], infor.Setting]:
     """フェイズの後処理
 
@@ -137,6 +127,13 @@ def clean_up_round(players:List[infor.Player], setting:infor.Setting)->Tuple[Lis
     setting.cleanup_round()
     for i in range(len(players)):
         players[i].cleanup_round()
+
+    #ポジションを回す
+    tmp_position = players[0].position
+    for i in range(len(players)-1):
+        players[i].set_position(players[i+1].position)
+    players[len(players)-1].set_position(tmp_position)
+
     return players, setting
 
 
@@ -166,11 +163,11 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
 
         if players[i].position == position.BigBlind:
             players[i].set_blind(setting.sb_value*2)
-            setting.set_blind(GetFunc.next_index(players, i))
+            setting.update_blind(GetFunc.next_index(players, i))
 
     if len(players) == 2:
         players[0].set_blind(setting.sb_value*2)
-        setting.set_blind(GetFunc.next_index(players, 0))
+        setting.update_blind(GetFunc.next_index(players, 0))
 
     Redo_Flag = True
     First_Flag = True
@@ -188,7 +185,7 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
             First_Flag = False
 
         #何人残っているか確認する
-        Redo_Flag = GetFunc.remain_count(Redo_Flag, players, setting)
+        Redo_Flag = GetFunc.remain_count(Redo_Flag, players)
 
     #フロップに参加した人への処理
     for i in range(len(players)):
@@ -233,7 +230,7 @@ def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> 
     while(Redo_Flag):
         Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
         #何人残っているか確認する
-        Redo_Flag = GetFunc.remain_count(Redo_Flag, players, setting)
+        Redo_Flag = GetFunc.remain_count(Redo_Flag, players)
 
     return  clean_up_phase(players, setting) 
 
@@ -282,8 +279,33 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
         
         print("Who won?")
         winner_index = InFunc.winner(fold_index)
-        print("Winnner is",players[winner_index].name)
-        print("Get pot $",setting.main_pot)
-        players[winner_index].win(setting.main_pot)
+        pot = 0
+        if len(allin_list) != 0:
+            while(1):
+                tmp_box = players[winner_index].personal_bet
+                for i in range(len(players)):
+                    if players[i].personal_bet < tmp_box:
+                        pot += players[i].personal_bet
+                        setting.main_pot -= players[i].personal_bet
+                        players[i].personal_bet = 0
+                    else:
+                        pot += tmp_box
+                        setting.main_pot -= tmp_box
+                        players[i].personal_bet -= tmp_box
+                    if players[i].personal_bet == 0:
+                        fold_index[i] = 1
+
+                players[winner_index].win(pot)
+                print(players[winner_index].name," get $",pot)
+                if setting.main_pot == 0:
+                    break
+
+                pot = 0
+                print("Who next won?")
+                winner_index = InFunc.winner(fold_index)
+        else:
+            print("Winnner is",players[winner_index].name)
+            print("Get pot $",setting.main_pot)
+            players[winner_index].win(setting.main_pot)
 
     return clean_up_round(players, setting)

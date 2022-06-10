@@ -40,43 +40,38 @@ class Setting():
         self.call_need = 0
         self.raise_before = 0
         self.main_pot = 0
-        self.side_pot = []
-        self.side_pot_whose = []
 
+    #betの最小単位を設定
     def set_sb_value(self, value):
         self.sb_value = value
 
+    #現在のプレイヤーの添字を設定
     def set_turn(self, turn):
         self.turn = turn
 
-    def set_blind(self, turn):
+    #現在のプレイヤーの状態を設定
+    def set_turn_player_status(self, status):
+        self.turn_player_status = status
+
+    #callに必要な額を設定
+    def set_call_need(self, new_max):
+        self.call_need = new_max
+
+    #メインポットを設定する
+    def set_main_pot(self,sum):
+        self.main_pot = sum
+
+    #ブラインドを設定する
+    def update_blind(self, turn):
         self.raise_before = self.sb_value*2
         self.call_need = self.raise_before
         self.min_bet = self.call_need
         self.set_turn(turn)
 
-        
-    def reload_turn_player_status(self, status):
-        self.turn_player_status = status
-
-    def reload_call_need(self, new_max):
-        self.call_need = new_max
-
-    def reload_main_pot(self,sum):
-        self.main_pot = sum
-
-    def reload_side_pot(self,sum, i):
-        self.side_pot[i] = sum
-
-    def reload_raise_before(self, betting):
+    def update_raise_before(self, betting):
         before_call_need = self.call_need
-        self.reload_call_need(betting)
+        self.set_call_need(betting)
         self.raise_before = self.call_need - before_call_need
-
-
-    def make_side_pot(self, sum, turn):
-        self.side_pot.append(sum)
-        self.side_pot_whose.append(turn)
 
     def cleanup_phase(self):
         self.turn_player_status = Status.Waiting
@@ -89,7 +84,6 @@ class Setting():
         self.call_need = 0
         self.raise_before = 0
         self.main_pot = 0
-        self.side_pot = []
 
 
 #player１人の情報を持つクラス
@@ -105,7 +99,8 @@ class Player():
         self.log_join = 0
         self.log_raise = 0
         self.log_allin = 0
-        #各フェイズでいくら賭けたか　ラウンドが変わるとリセットされる
+        self.personal_bet = 0
+        #各ラウンドでいくら賭けたか　ラウンドが変わるとリセットされる
         self.log_bet = []
         #各ラウンドでのcipの推移　ゲームが終わるまで保持される
         self.log_cip = []
@@ -119,6 +114,7 @@ class Player():
     def set_blind(self, sb_value):
         self.status = Status.Blind
         self.betting = sb_value
+        self.personal_bet = sb_value
         self.cip -= self.betting
 
 
@@ -131,6 +127,7 @@ class Player():
         self.status = Status.Called
         tmp_box = call_need - self.betting
         self.betting += tmp_box
+        self.personal_bet += tmp_box
         self.cip -= tmp_box
 
     #raiseを行った場合の処理
@@ -138,6 +135,7 @@ class Player():
         self.status = Status.Raised
         self.log_raise += 1
         self.betting += value
+        self.personal_bet += value
         self.cip -= value
 
     #checkを行った場合の処理
@@ -152,6 +150,7 @@ class Player():
     def do_allin(self):
         self.status = Status.Allin
         self.betting += self.cip
+        self.personal_bet += self.cip
         self.log_allin += 1
         self.cip = 0
 
@@ -174,7 +173,6 @@ class Player():
     def record_join(self):
         self.log_join += 1
 
-
     #現在まで賭けた金額を出力する
     def export_bet(self):
         sum = 0
@@ -188,22 +186,22 @@ class Player():
     def win(self, sum):
         self.log_win += 1
         self.cip += sum        
-
+    
     #１つのフェイズが終了した際に必要な処理
     def cleanup_phase(self):
         if self.status == Status.Folded or self.status == Status.Allin:
             self.action = Action.taken
-            self.log_bet.append(self.betting)
-            self.betting = 0
         else:
             self.status = Status.Waiting
-            self.log_bet.append(self.betting)
-            self.betting = 0
+        self.log_bet.append(self.betting)
+        self.betting = 0
+            
 
     #１つのラウンドが終了した際に必要な処理
     def cleanup_round(self):
         self.log_cip.append(self.cip)
         self.status = Status.Waiting
         self.action = Action.Stand
-        self.betting = 0
+        self.personal_bet = 0
         self.log_bet = []
+        self.betting = 0

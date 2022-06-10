@@ -1,5 +1,14 @@
-#入力されたデータがint型かチェックする
-def int_data():
+
+from typing import List
+import infor
+
+
+def int_data()-> int:
+    """入力されたデータがint型かチェックする
+
+    Returns:
+        int: 
+    """
     
     Correct_Flag = True
 
@@ -15,8 +24,13 @@ def int_data():
 
     return value_int
 
-#入力された文字がq,"c"判断する
-def cq_data():
+
+def cq_data()-> str:
+    """入力された文字がq,c判断する
+
+    Returns:
+        str:
+    """
 
     Correct_Flag = True
 
@@ -35,8 +49,13 @@ def cq_data():
 
     return value
 
-#入力されたデータがint型で2~6かチェックする
-def between2and6():
+
+def between2and6()-> int:
+    """入力されたデータがint型で2~6かチェックする
+
+    Returns:
+        int: 
+    """
     
     Correct_Flag = True
 
@@ -49,14 +68,22 @@ def between2and6():
             if tmp_box > 1 and tmp_box < 7:
                 value_int = tmp_box
                 Correct_Flag = False
-        else:
+
+        if Correct_Flag == True:
             print("Please enter the number 2~6.")
 
     return value_int
 
 
-#入力されたデータがfold_indexないかチェックする
-def winner(fold_index):
+def winner(fold_index:List[int])-> int:
+    """入力されたデータがfold_indexでないかチェックする
+
+    Args:
+        fold_index (List[int]): 
+
+    Returns:
+        int: 
+    """
     
     Correct_Flag = True
 
@@ -66,7 +93,7 @@ def winner(fold_index):
 
         if tmp_box.isnumeric():
             tmp_box = int(tmp_box)
-            if tmp_box <= len(fold_index):
+            if tmp_box < len(fold_index):
                 if fold_index[tmp_box] == 0:
                     value_int = tmp_box
                     Correct_Flag = False
@@ -77,8 +104,16 @@ def winner(fold_index):
     return value_int
 
 
-#入力された文字をチェックする
-def what_do(players, setting):
+def what_do(players:List[infor.Player], setting:infor.Setting)-> any:
+    """入力された文字をチェックする
+
+    Args:
+        players (List[infor.Player]): 
+        setting (infor.Setting): 
+
+    Returns:
+        any: 
+    """
 
     Correct_Flag = True
     now_bet = players[setting.turn].betting

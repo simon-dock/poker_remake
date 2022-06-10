@@ -44,12 +44,6 @@ def poker(players: List[infor.Player], setting: infor.Setting)-> List[infor.Play
         if entered_char == "q":
             End_Flag = False
 
-        #ポジションを回す
-        tmp_position = players[0].position
-        for i in range(len(players)-1):
-            players[i].position = players[i+1].position
-        players[len(players)-1].position = tmp_position
-
     print("#####################")
     print("GAME OVER")
     print("")
