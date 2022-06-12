@@ -14,11 +14,6 @@ class Status(Enum):
     Folded = 5
     Allin = 6
 
-#そのフェイズでの行動状態を列挙
-class Action(Enum):
-    Stand = 0
-    taken = 1
-
 #ポーカーにおける位置を列挙
 class Position(Enum):
     DealerButton = 0
@@ -36,7 +31,6 @@ class Setting():
         self.game_count = None
         self.turn = 0
         self.turn_player_status = Status.Waiting
-        self.min_bet = 0
         self.call_need = 0
         self.raise_before = 0
         self.main_pot = 0
@@ -57,33 +51,39 @@ class Setting():
     def set_call_need(self, new_max):
         self.call_need = new_max
 
+    #前のレイズの差額がいくらか設定
+    def set_raise_before(self, value):
+        self.raise_before = value
+
     #メインポットを設定する
     def set_main_pot(self,sum):
         self.main_pot = sum
 
-    #ブラインドを設定する
+    #ブラインドの処理
     def update_blind(self, turn):
-        self.raise_before = self.sb_value*2
-        self.call_need = self.raise_before
-        self.min_bet = self.call_need
+        self.set_raise_before(self.sb_value*2)
+        self.set_call_need(self.raise_before)
         self.set_turn(turn)
-
+        
+    #レイズされたときの処理
     def update_raise_before(self, betting):
         before_call_need = self.call_need
         self.set_call_need(betting)
-        self.raise_before = self.call_need - before_call_need
+        self.set_raise_before(self.call_need - before_call_need)
 
+    #フェイズの後処理
     def cleanup_phase(self):
-        self.turn_player_status = Status.Waiting
-        self.call_need = 0
-        self.raise_before = 0
+        self.set_turn_player_status(Status.Waiting)
+        self.set_call_need(0)
+        self.set_raise_before(0)
 
+    #ラウンドの後処理
     def cleanup_round(self):
-        self.turn_player_status = Status.Waiting
-        self.turn = 0
-        self.call_need = 0
-        self.raise_before = 0
-        self.main_pot = 0
+        self.set_turn_player_status(Status.Waiting)
+        self.set_turn(0)
+        self.set_call_need(0)
+        self.set_raise_before(0)
+        self.set_main_pot(0)
 
 
 #player１人の情報を持つクラス
@@ -110,49 +110,81 @@ class Player():
     def set_name(self, name):
         self.name = name
 
-    #blindについての設定をする
-    def set_blind(self, sb_value):
-        self.status = Status.Blind
-        self.betting = sb_value
-        self.personal_bet = sb_value
-        self.cip -= self.betting
-
+    #状態を設定する
+    def set_status(self, status):
+        self.status = status
 
     #ポジションを設定する
-    def set_position(self, name):
-        self.position = name
+    def set_position(self, position):
+        self.position = position
+
+    #ベットした金額を設定する
+    def set_betting(self, betting):
+        self.betting = betting
+
+    #個人のベット額を設定する
+    def set_personal_bet(self, value):
+        self.personal_bet = value
+
+    #持ち金を設定する
+    def set_cip(self,value):
+        self.cip = value
+
+    #log_raiseのカウントを増やす
+    def add_log_raise(self):
+        self.log_raise += 1
+    
+    #log_allinのカウントを増やす
+    def add_log_allin(self):
+        self.log_allin += 1
+    
+    #log_joinのカウントを増やす
+    def add_log_join(self):
+        self.log_join += 1
+
+    #log_winのカウントを増やす
+    def add_log_win(self):
+        self.log_win += 1
+
+    #blindについての設定をする
+    def set_blind(self, sb_value):
+        self.set_status(Status.Blind)
+        self.set_betting(sb_value)
+        self.set_personal_bet(sb_value)
+        self.set_cip(self.cip-self.betting)
+
 
     #callを行った場合の処理
     def do_call(self, call_need):
-        self.status = Status.Called
+        self.set_status(Status.Called)
         tmp_box = call_need - self.betting
-        self.betting += tmp_box
-        self.personal_bet += tmp_box
-        self.cip -= tmp_box
+        self.set_betting(self.betting+tmp_box)
+        self.set_personal_bet(self.personal_bet+tmp_box)
+        self.set_cip(self.cip-tmp_box)
 
     #raiseを行った場合の処理
     def do_raise(self, value):
-        self.status = Status.Raised
-        self.log_raise += 1
-        self.betting += value
-        self.personal_bet += value
-        self.cip -= value
+        self.set_status(Status.Raised)
+        self.add_log_raise()
+        self.set_betting(self.betting+value)
+        self.set_personal_bet(self.personal_bet+value)
+        self.set_cip(self.cip-value)
 
     #checkを行った場合の処理
     def do_check(self):
-        self.status = Status.Cheched
+        self.set_status(Status.Cheched)
 
     #foldを行った場合の処理
     def do_Fold(self):
-        self.status = Status.Folded
+        self.set_status(Status.Folded)
 
     #allinを行った場合の処理
     def do_allin(self):
-        self.status = Status.Allin
-        self.betting += self.cip
-        self.personal_bet += self.cip
-        self.log_allin += 1
-        self.cip = 0
+        self.set_status(Status.Allin)
+        self.set_betting(self.betting+self.cip)
+        self.set_personal_bet(self.personal_bet+self.cip)
+        self.add_log_allin()
+        self.set_cip(0)
 
     #命令を判断する
     def judge_command(self, command, call_need):
@@ -168,10 +200,6 @@ class Player():
             self.do_allin()
         else:
             print("error do_command")
-            
-    #フロップに参加した場合を記録する
-    def record_join(self):
-        self.log_join += 1
 
     #現在まで賭けた金額を出力する
     def export_bet(self):
@@ -184,24 +212,24 @@ class Player():
             
     #勝った時の処理
     def win(self, sum):
-        self.log_win += 1
-        self.cip += sum        
+        self.add_log_win()
+        self.set_cip(self.cip+sum)        
     
     #１つのフェイズが終了した際に必要な処理
     def cleanup_phase(self):
         if self.status == Status.Folded or self.status == Status.Allin:
-            self.action = Action.taken
+            pass            
         else:
-            self.status = Status.Waiting
+            self.set_status(Status.Waiting)
         self.log_bet.append(self.betting)
-        self.betting = 0
+        self.set_betting(0)
             
 
     #１つのラウンドが終了した際に必要な処理
     def cleanup_round(self):
         self.log_cip.append(self.cip)
         self.status = Status.Waiting
-        self.action = Action.Stand
-        self.personal_bet = 0
+        self.set_betting(0)
+        self.set_personal_bet(0)
         self.log_bet = []
-        self.betting = 0
+        

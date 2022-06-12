@@ -38,24 +38,7 @@ def status_count(players:List[infor.Player] , status:infor.Status)-> int:
         if players[i].status == status:
             count += 1
     return count
-
-
-def action_count(players:List[infor.Player] , action:infor.Action)-> int:
-    """特定の行動の人の数を取得
-
-    Args:
-        players (List[infor.Player]): 
-        action (infor.Status): 
-
-    Returns:
-        int: 
-    """
-    count = 0
-    for i in range(len(players)):
-        if players[i].action == action:
-            count += 1
-    return count
-
+    
 
 def remain_count(Redo_Flag:bool, players:List[infor.Player])-> bool:
     """何人残っているかを判断しフラグの状態を取得

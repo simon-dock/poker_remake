@@ -190,7 +190,7 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
     #フロップに参加した人への処理
     for i in range(len(players)):
         if players[i].status != status.Folded:
-            players[i].record_join()
+            players[i].add_log_join()
 
     #フェイズの後処理    
     return clean_up_phase(players, setting) 
