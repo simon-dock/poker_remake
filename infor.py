@@ -1,8 +1,4 @@
-from asyncio import start_unix_server
-from cgitb import small
 from enum import Enum
-from nis import match
-from re import S
 
 #状態を列挙
 class Status(Enum):
@@ -94,7 +90,7 @@ class Player():
         self.status = Status.Waiting
         self.position = None
         self.betting = 0
-        self.cip = 100
+        self.cip = 0
         self.log_win = 0
         self.log_join = 0
         self.log_raise = 0
@@ -228,7 +224,7 @@ class Player():
     #１つのラウンドが終了した際に必要な処理
     def cleanup_round(self):
         self.log_cip.append(self.cip)
-        self.status = Status.Waiting
+        self.set_status(Status.Waiting)
         self.set_betting(0)
         self.set_personal_bet(0)
         self.log_bet = []

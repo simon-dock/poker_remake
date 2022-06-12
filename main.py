@@ -13,7 +13,7 @@ def main():
     players = MakeFunc.players_data()
 
     #ゲームの設定を行う
-    setting = MakeFunc.setting_data()
+    setting = MakeFunc.setting_data(players)
 
     #ポーカーの管理をする
     players = SysFunc.poker(players, setting)

@@ -35,11 +35,14 @@ def players_data()-> List[infor.Player]:
 
 
 #設定を作成
-def setting_data()-> infor.Setting:
+def setting_data(players:List[infor.Player])-> infor.Setting:
     """設定を外部からの入力を元に作成
 
+    Args:
+        players (List[infor.Player]): 
+
     Returns:
-        setting
+        infor.Setting: 
     """
     
     print("Set up the game.")
@@ -49,6 +52,14 @@ def setting_data()-> infor.Setting:
     setting.set_sb_value(InFunc.int_data())
 
     print("Small blind is ", setting.sb_value)
+
+    print("Enter the initial cip.")
+
+    tmp_box = InFunc.int_data()
+    for i in range(len(players)):
+        players[i].set_cip(tmp_box)
+
+    print("Initial cip is ", tmp_box)
     print("Game setup is finished.")
     print("")
 
