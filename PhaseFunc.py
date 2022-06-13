@@ -39,6 +39,10 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
         command = InFunc.what_do(players, setting)
         players[setting.turn].judge_command(command, setting.call_need)
         setting.set_turn_player_status(players[setting.turn].status)
+
+        #オールインかチェックする
+        if players[setting.turn].cip == 0:
+            players[setting.turn].set_status(status.Allin)
    
 
         #場の最大掛け金の更新 raiseの場合
@@ -235,7 +239,6 @@ def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> 
     return  clean_up_phase(players, setting) 
 
 
-
 def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player], infor.Setting]:
     """ショウダウンか自動勝利
 
@@ -279,19 +282,22 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
         
         print("Who won?")
         winner_index = InFunc.winner(fold_index)
+        
+        #オールインした時の場合とそうでない場合
         pot = 0
         if len(allin_list) != 0:
             while(1):
                 tmp_box = players[winner_index].personal_bet
+                #全員の賭けた額から勝った人が賭けた金額を引く
                 for i in range(len(players)):
                     if players[i].personal_bet < tmp_box:
                         pot += players[i].personal_bet
-                        setting.main_pot -= players[i].personal_bet
-                        players[i].personal_bet = 0
+                        setting.set_main_pot(setting.main_pot-players[i].personal_bet)
+                        players[i].set_personal_bet(0)
                     else:
                         pot += tmp_box
-                        setting.main_pot -= tmp_box
-                        players[i].personal_bet -= tmp_box
+                        setting.set_main_pot(setting.main_pot-tmp_box)
+                        players[i].set_personal_bet(players[i].personal_bet-tmp_box)
                     if players[i].personal_bet == 0:
                         fold_index[i] = 1
 
@@ -303,6 +309,7 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
                 pot = 0
                 print("Who next won?")
                 winner_index = InFunc.winner(fold_index)
+
         else:
             print("Winnner is",players[winner_index].name)
             print("Get pot $",setting.main_pot)

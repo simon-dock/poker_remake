@@ -38,7 +38,23 @@ def status_count(players:List[infor.Player] , status:infor.Status)-> int:
         if players[i].status == status:
             count += 1
     return count
-    
+
+
+def zero_cip_count(players:List[infor.Player])-> int:
+    """cipが0の人の数を取得
+
+    Args:
+        players (List[infor.Player]): 
+
+    Returns:
+        int: 
+    """
+    count = 0
+    for i in range(len(players)):
+        if players[i].cip == 0:
+            count += 1
+    return count
+
 
 def remain_count(Redo_Flag:bool, players:List[infor.Player])-> bool:
     """何人残っているかを判断しフラグの状態を取得

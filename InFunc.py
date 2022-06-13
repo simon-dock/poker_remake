@@ -49,6 +49,58 @@ def cq_data()-> str:
 
     return value
 
+def ca_data()-> str:
+    """入力された文字がa,c判断する
+
+    Returns:
+        str:
+    """
+
+    Correct_Flag = True
+
+    while(Correct_Flag):
+
+        tmp_box = input()
+
+        if tmp_box == 'c':
+            value = 'c'
+            Correct_Flag = False
+        elif tmp_box == 'a':
+            value = 'a'
+            Correct_Flag = False
+        else:
+            print("Please enter A of add or C of contine.")
+
+    return value
+
+
+def selected_player(players:List[infor.Player])->int:
+    """選ばれるプレイヤーを取得する
+
+    Args:
+        players (List[infor.Player]): 
+
+    Returns:
+        int: 
+    """
+
+    Correct_Flag = True
+
+    while(Correct_Flag):
+
+        tmp_box = input()
+
+        if tmp_box.isnumeric():
+            tmp_box = int(tmp_box)
+            if tmp_box >= 0  and tmp_box < len(players):
+                value = tmp_box
+                Correct_Flag = False
+
+        if Correct_Flag == True:
+            print("Please enter the number.")
+
+    return value
+
 
 def between2and6()-> int:
     """入力されたデータがint型で2~6かチェックする
@@ -124,7 +176,7 @@ def what_do(players:List[infor.Player], setting:infor.Setting)-> any:
 
         if tmp_box.isnumeric():
             value = int(tmp_box)
-            if now_bet + value >= setting.call_need + setting.raise_before:
+            if now_bet + value >= setting.call_need + setting.raise_before and value <= players[setting.turn].cip :
                 Correct_Flag = False
             else:
                 print("Please enter correct number")

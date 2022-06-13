@@ -1,4 +1,6 @@
 from typing import List
+
+from sympy import N
 import InFunc
 import infor
 
@@ -34,7 +36,6 @@ def players_data()-> List[infor.Player]:
     return players
 
 
-#設定を作成
 def setting_data(players:List[infor.Player])-> infor.Setting:
     """設定を外部からの入力を元に作成
 
@@ -64,3 +65,45 @@ def setting_data(players:List[infor.Player])-> infor.Setting:
     print("")
 
     return setting
+
+
+def add_cip(players:List[infor.Player])->List[infor.Player]:
+    """チップの追加を設定
+
+    Args:
+        players (List[infor.Player]): 
+
+    Returns:
+        List[infor.Player]: 
+    """
+
+    print("Set up the player's cip.")
+
+    Redo_Flag = True
+    while(Redo_Flag):
+        print("Enter the number of player which you want to add the cip.")
+
+        for i in range(len(players)):
+            print(players[i].name, "is", i)
+
+        numbet_select = InFunc.selected_player(players)
+
+        print("How much do you want to add cip?")
+
+        cip_addtional = InFunc.int_data()
+
+        players[numbet_select].set_cip(players[numbet_select].cip+cip_addtional)
+
+        print(players[numbet_select].name," added ",cip_addtional,"$.")
+        print("You have ",players[numbet_select].cip,"$.")
+
+        print("Enter C to continue or Q to stop.")
+        entered_char = InFunc.cq_data()
+        if entered_char == "q":
+            Redo_Flag = False
+
+    print("Cip setup is finished.")
+    print("")
+
+    
+    return players
