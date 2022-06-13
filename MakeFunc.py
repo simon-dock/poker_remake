@@ -1,17 +1,21 @@
 from typing import List
 
 from sympy import N
+import pygame as pg
 import InFunc
 import infor
+import pyfor
 
-def players_data()-> List[infor.Player]:
+def players_data(WIN)-> List[infor.Player]:
     """プレイヤーデータを外部からの入力を元に作成
 
     Returns:
         players
     """
-
-    print("Set up the players.")
+    WIN.fill(pyfor.BLACK)
+    template = pg.font.SysFont(None,300)
+    text = template.render("Set up the players.", True, pyfor.WHITE)
+    WIN.blit(text, (pyfor.WIN_WIDTH/12,pyfor.WIN_HEIGHT/3))
 
     #参加者の人数を入力する
     print("Enter the number of players.")

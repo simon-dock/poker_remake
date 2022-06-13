@@ -1,7 +1,7 @@
-from enum import Enum
+import enum
 
 #状態を列挙
-class Status(Enum):
+class Status(enum.Enum):
     Waiting = 0
     Blind = 1
     Cheched = 2
@@ -11,7 +11,7 @@ class Status(Enum):
     Allin = 6
 
 #ポーカーにおける位置を列挙
-class Position(Enum):
+class Position(enum.Enum):
     DealerButton = 0
     SmallBlind = 1
     BigBlind = 2

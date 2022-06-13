@@ -1,11 +1,16 @@
+import pyfor
+
+import pygame as pg
+from pygame.locals import *
+
 #プログラムの起動メッセージ
-def massege_start():
-    print("#####################")
-    print("")
-    print("start Tool of Poker")
-    print("")
-    print("#####################")
-    print("")
+def massege_start(WIN):
+    template = pg.font.SysFont(None,300)
+    text = template.render("Tool of Poker", True, pyfor.WHITE)
+    WIN.blit(text, (pyfor.WIN_WIDTH/12,pyfor.WIN_HEIGHT/3))
+    pg.display.update()
+    pg.time.delay(2000)
+    WIN.fill(pyfor.BLACK)
 
 #結果を表示
 def result(players):

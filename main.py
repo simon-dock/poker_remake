@@ -3,45 +3,113 @@ import MakeFunc
 import SysFunc
 import WriteFunc
 import infor
+import pyfor
 
-import pygame
+import pygame as pg
+import sys
+from pygame.locals import *
+
+pystatus = pyfor.Status
 
 #ウィンドウの初期化
-pygame.init()
-WIN_WIDTH = 1100
-WIN_HEIGHT = 1200
-WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+pg.init()
+
+WIN = pg.display.set_mode((pyfor.WIN_WIDTH, pyfor.WIN_HEIGHT))
+
+pg.display.set_caption("Poker_Tool")
+
+def jud_key(key: int):
+    """
+    入力されたキーに対応する文字を返す関数
+    扱えないキーが入力された場合はNoneを返す
+    Pygameのキーは定数(整数)が割り当てられているので引数はint型になる
+    扱える文字は以下の通り
+    ・アルファベット(A-Z, a-z)
+    ・数字(0-9)
+    ・半角スペース
+    """
+    if (key >= pg.K_a)and(key <= pg.K_z):  # アルファベットが入力された？
+        if pg.key.get_mods() & pg.KMOD_SHIFT:  # Shiftキーが入力された？
+            return pg.key.name(key).upper()  # 大文字
+        else:
+            return pg.key.name(key)  # 小文字
+    elif ((key >= pg.K_0)and(key <= pg.K_9)):  # 0-9が入力された？
+        if pg.key.get_mods() & pg.KMOD_SHIFT:  # Shiftキーが入力された？
+            return None
+        else:
+            return pg.key.name(key)
+    elif key == pg.K_SPACE:  # スペースが入力された？
+        return ' '
+    else:  # 例外？
+        return None
 
 
-pygame.display.set_caption("Poker_Tool")
-
-run = True
-
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-    pygame.display.update()
-    
 def main():
 
-    #プログラムの起動メッセージ
-    DisFunc.massege_start() 
+    run = True
+    pyset = pyfor.Setting()
 
-    #参加者のデータリストを作成
-    players = MakeFunc.players_data()
+    template = pg.font.SysFont(None,100)
 
-    #ゲームの設定を行う
-    setting = MakeFunc.setting_data(players)
+    # テキスト入力処理の初期設定
 
-    #ポーカーの管理をする
-    players = SysFunc.poker(players, setting)
+    txt_give = ''  # 確定(Enter)された文字列を保持する変数
+    txt_words = []  # 入力された文字を保持するリスト
+    txt_tmp = ''  
 
-    #結果を表示する
-    DisFunc.result(players)
+    while run:
+        pg.time.delay(30)
+        for event in pg.event.get():
 
-    #結果をテキストファイルに出力する
-    WriteFunc.result(players)
+            if event.type == pg.QUIT:
+                run = False
+
+            if event.type == pg.KEYDOWN:  # キー入力検知？
+                if event.key == pg.K_RETURN:  # Enter押下？
+                    txt_give = ''.join(txt_words)  # 文字列に直して保持
+                    txt_words = []  # 初期化
+                    txt_tmp = ''  # 初期化
+                    print('input \'Enter\'')  # ログ
+                    print(txt_give)
+                elif event.key == pg.K_BACKSPACE:  # BackSpace押下？
+                    if not len(txt_words) == 0:  # 入力中の文字が存在するか？
+                        txt_words.pop()  # 最後の文字を取り出す(削除)
+                else:  # 上記以外のキーが押された時
+                    txt_tmp = jud_key(event.key)
+                    if not txt_tmp == None:  # 入力可能な文字？
+                        txt_words.append(txt_tmp)  #
+
+                if len(txt_words) != 0:  # 入力中のテキストがあるか？
+                    txt = template.render(''.join(txt_words) + '|', True, pyfor.WHITE)  # テキストとカーソルを表示
+                else:
+                    txt = template.render('|', True, pyfor.WHITE)  # カーソルだけを表示
+
+                # テキストの描画(表示物, (x座標, y座標))
+                WIN.fill(pyfor.BLACK)
+                WIN.blit(txt, (pyfor.WIN_WIDTH/12,pyfor.WIN_HEIGHT*3/4))
+
+            #プログラムの起動メッセージ
+            if pyset.status == pystatus.Initial:
+                pyset.set_status(pystatus.Makedata)
+                DisFunc.massege_start(WIN) 
+
+            #参加者のデータリストを作成
+            #if pyset.status == pystatus.Makedata:
+                #players = MakeFunc.players_data(WIN)
+
+            #ゲームの設定を行う
+            #setting = MakeFunc.setting_data(players)
+
+            #ポーカーの管理をする
+            #players = SysFunc.poker(players, setting)
+
+            #結果を表示する
+            #DisFunc.result(players)
+
+            #結果をテキストファイルに出力する
+            #WriteFunc.result(players)
+
+        pg.display.update()
 
 if __name__ == '__main__':
     main()
