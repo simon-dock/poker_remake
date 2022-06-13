@@ -4,6 +4,25 @@ import SysFunc
 import WriteFunc
 import infor
 
+import pygame
+
+#ウィンドウの初期化
+pygame.init()
+WIN_WIDTH = 1100
+WIN_HEIGHT = 1200
+WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+
+
+pygame.display.set_caption("Poker_Tool")
+
+run = True
+
+while run:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+    pygame.display.update()
+    
 def main():
 
     #プログラムの起動メッセージ
