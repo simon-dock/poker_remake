@@ -102,29 +102,22 @@ def selected_player(players:List[infor.Player])->int:
     return value
 
 
-def between2and6()-> int:
+def between2and6(tmp_box)-> int:
     """入力されたデータがint型で2~6かチェックする
 
     Returns:
         int: 
     """
-    
-    Correct_Flag = True
+    value_int = tmp_box
 
-    while(Correct_Flag):
+    Correct_Flag = False
+    if tmp_box.isnumeric():
+        tmp_box = int(tmp_box)
+        if tmp_box > 1 and tmp_box < 7:
+            value_int = tmp_box
+            Correct_Flag = True
 
-        tmp_box = input()
-
-        if tmp_box.isnumeric():
-            tmp_box = int(tmp_box)
-            if tmp_box > 1 and tmp_box < 7:
-                value_int = tmp_box
-                Correct_Flag = False
-
-        if Correct_Flag == True:
-            print("Please enter the number 2~6.")
-
-    return value_int
+    return Correct_Flag, value_int
 
 
 def winner(fold_index:List[int])-> int:

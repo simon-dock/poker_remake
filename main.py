@@ -53,14 +53,18 @@ def main():
 
     # テキスト入力処理の初期設定
 
+    txt = template.render('|', True, pyfor.WHITE)  # カーソルだけを表示
+
     txt_give = ''  # 確定(Enter)された文字列を保持する変数
     txt_words = []  # 入力された文字を保持するリスト
     txt_tmp = ''  
+    players = []
 
     while run:
         pg.time.delay(30)
+        
         for event in pg.event.get():
-
+            WIN.fill(pyfor.BLACK)
             if event.type == pg.QUIT:
                 run = False
 
@@ -70,7 +74,8 @@ def main():
                     txt_words = []  # 初期化
                     txt_tmp = ''  # 初期化
                     print('input \'Enter\'')  # ログ
-                    print(txt_give)
+                    pyset.set_entered(True)
+                    pyset.set_txt(txt_give)
                 elif event.key == pg.K_BACKSPACE:  # BackSpace押下？
                     if not len(txt_words) == 0:  # 入力中の文字が存在するか？
                         txt_words.pop()  # 最後の文字を取り出す(削除)
@@ -85,17 +90,14 @@ def main():
                     txt = template.render('|', True, pyfor.WHITE)  # カーソルだけを表示
 
                 # テキストの描画(表示物, (x座標, y座標))
-                WIN.fill(pyfor.BLACK)
-                WIN.blit(txt, (pyfor.WIN_WIDTH/12,pyfor.WIN_HEIGHT*3/4))
 
             #プログラムの起動メッセージ
-            if pyset.status == pystatus.Initial:
-                pyset.set_status(pystatus.Makedata)
-                DisFunc.massege_start(WIN) 
+            if pyset.status_func == pystatus.Initial:
+                pyset = DisFunc.massege_start(WIN,pyset) 
 
             #参加者のデータリストを作成
-            #if pyset.status == pystatus.Makedata:
-                #players = MakeFunc.players_data(WIN)
+            if pyset.status_func == pystatus.MakeFunc:
+                players, pyset= MakeFunc.players_data(WIN,players,pyset)
 
             #ゲームの設定を行う
             #setting = MakeFunc.setting_data(players)
@@ -109,6 +111,7 @@ def main():
             #結果をテキストファイルに出力する
             #WriteFunc.result(players)
 
+        WIN.blit(txt, (pyfor.WIN_WIDTH/12,pyfor.WIN_HEIGHT*3/4))
         pg.display.update()
 
 if __name__ == '__main__':
