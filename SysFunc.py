@@ -40,9 +40,9 @@ def end_or_finish(Redo_Flag:bool)->bool:
     Returns:
         bool: 
     """
-    print("Enter C to continue or Q to stop.")
-    entered_char = InFunc.cq_data()
-    if entered_char == "q":
+    print("If you want to quit the game, enter y/n.")
+    entered_char = InFunc.yn_data()
+    if entered_char == "y":
         Redo_Flag = False
 
     return Redo_Flag
@@ -69,9 +69,9 @@ def cleanup_cip(players:List[infor.Player])->List[infor.Player]:
             players = MakeFunc.add_cip(players)
 
     if AddCip_Flag == False:
-        print("If you want to add a cip, enter A or C to continue.")
-        entered_char = InFunc.ca_data()
-        if entered_char == "a":
+        print("If you want to add a cip, enter y/n.")
+        entered_char = InFunc.yn_data()
+        if entered_char == "y":
             players = MakeFunc.add_cip(players)
         
     return players

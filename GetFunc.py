@@ -1,5 +1,7 @@
 from typing import List
+import InFunc
 import infor
+import copy
 
 status = infor.Status
 position = infor.Position
@@ -71,3 +73,18 @@ def remain_count(Redo_Flag:bool, players:List[infor.Player])-> bool:
         Redo_Flag = False
 
     return Redo_Flag
+
+def check_comfirm(Redo_Flag, players, setting, backup_play, backup_set):
+    print("If you want to back, enter y/n.")
+    enteredchar = InFunc.yn_data()
+    if enteredchar == 'y':
+        print("")
+        print("--------------------")
+        print("Roll Back 1 phase")
+        print("--------------------")
+        print("")
+        players = copy.deepcopy(backup_play)
+        setting = copy.deepcopy(backup_set)
+        Redo_Flag = True
+    
+    return Redo_Flag, players, setting, backup_play, backup_set

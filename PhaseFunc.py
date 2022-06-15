@@ -1,8 +1,10 @@
+from ast import In
 from distutils.log import info
 from itertools import count
 from operator import setitem
 from tkinter import Place
 from typing import List, Tuple
+import copy
 import GetFunc
 import InFunc
 import infor
@@ -11,7 +13,7 @@ status = infor.Status
 position = infor.Position
 
 
-def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)->Tuple[bool, List[infor.Player], infor.Setting]:
+def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting, backup_play:List[infor.Player], backup_set:infor.Setting)->Tuple[bool, List[infor.Player], infor.Setting, List[infor.Player], infor.Setting]:
     """通常フェイズの処理
 
     Args:
@@ -24,39 +26,56 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
     """
     #フォールド,オールインしていない
     if players[setting.turn].status != status.Folded and players[setting.turn].status != status.Allin:
+        Rollback_Flag = True
+        while Rollback_Flag:
+            #データの表示
+            print("--------------------")
+            print("Now Player is ",players[setting.turn].name)
+            print("You have         $",players[setting.turn].cip)
+            print("Pot has          $",setting.main_pot)
+            print("You are betting  $",players[setting.turn].betting)
+            print("Max bet is       $",setting.call_need)
+            print("Minimum raise is $",setting.call_need+setting.raise_before)
+            print("--------------------")
 
-        #データの表示
-        print("--------------------")
-        print("Now Player is ",players[setting.turn].name)
-        print("You have         $",players[setting.turn].cip)
-        print("Pot has          $",setting.main_pot)
-        print("You are betting  $",players[setting.turn].betting)
-        print("Max bet is       $",setting.call_need)
-        print("Minimum raise is $",setting.call_need+setting.raise_before)
-        print("--------------------")
-        
-        #入力受付、格納
-        command = InFunc.what_do(players, setting)
-        players[setting.turn].judge_command(command, setting.call_need)
-        setting.set_turn_player_status(players[setting.turn].status)
-
-        #オールインかチェックする
-        if players[setting.turn].cip == 0:
-            players[setting.turn].set_status(status.Allin)
-   
-
-        #場の最大掛け金の更新 raiseの場合
-        if players[setting.turn].status == status.Raised:
-            setting.update_raise_before(players[setting.turn].betting)
             
-        #allinの場合
-        if players[setting.turn].status == status.Allin:
-            if players[setting.turn].betting > setting.call_need:
-                setting.update_raise_before(players[setting.turn].betting)
-        
-        #potの計算
-        players, setting = get_pot(players, setting)
+            #入力受付、格納
+            command = InFunc.what_do(players, setting)
+            if command == 'b':
+                print("")
+                print("--------------------")
+                print("Roll Back 1 phase")
+                print("--------------------")
+                print("")
+                players = copy.deepcopy(backup_play)
+                setting = copy.deepcopy(backup_set)
+            else:
+                #backupの作成
+                backup_play = copy.deepcopy(players)
+                backup_set = copy.deepcopy(setting)
+                Rollback_Flag = False
 
+                players[setting.turn].judge_command(command, setting.call_need)
+                setting.set_turn_player_status(players[setting.turn].status)
+
+                #オールインかチェックする
+                if players[setting.turn].cip == 0:
+                    players[setting.turn].set_status(status.Allin)
+        
+
+                #場の最大掛け金の更新 raiseの場合
+                if players[setting.turn].status == status.Raised:
+                    setting.update_raise_before(players[setting.turn].betting)
+                    
+                #allinの場合
+                if players[setting.turn].status == status.Allin:
+                    if players[setting.turn].betting > setting.call_need:
+                        setting.update_raise_before(players[setting.turn].betting)
+                
+                #potの計算
+                players, setting = get_pot(players, setting)
+        
+            
 
     #次のプレイヤーの添字を取得
     setting.turn = GetFunc.next_index(players, setting.turn)
@@ -68,7 +87,7 @@ def run_poker(Redo_Flag:bool, players:List[infor.Player], setting:infor.Setting)
         if players[setting.turn].status != status.Waiting and players[setting.turn].status != status.Folded:
             Redo_Flag = False
 
-    return Redo_Flag, players, setting
+    return Redo_Flag, players, setting, backup_play, backup_set
 
 
 def get_pot(players:List[infor.Player], setting:infor.Setting)->Tuple[List[infor.Player], infor.Setting]:
@@ -133,14 +152,14 @@ def clean_up_round(players:List[infor.Player], setting:infor.Setting)->Tuple[Lis
         players[i].cleanup_round()
 
     #ポジションを回す
-    tmp_position = players[0].position
-    for i in range(len(players)-1):
-        players[i].set_position(players[i+1].position)
-    players[len(players)-1].set_position(tmp_position)
+    tmp_position = players[len(players)-1].position
+    for i in reversed(range(1,len(players))):
+        players[i].set_position(players[i-1].position)
+    players[0].set_position(tmp_position)
 
     return players, setting
 
-
+#u y ya t 
 def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[infor.Player],infor.Setting]:
     """プリフロップの処理
         ・sb,bbの設定
@@ -174,22 +193,29 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
         setting.update_blind(GetFunc.next_index(players, 0))
 
     Redo_Flag = True
-    First_Flag = True
+    backup_play = copy.deepcopy(players)
+    backup_set = copy.deepcopy(setting)
 
     #potの計算
     players, setting = get_pot(players, setting)
 
     while(Redo_Flag):
         
-        Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
+        Redo_Flag, players, setting, backup_play, backup_set = run_poker(Redo_Flag, players, setting, backup_play, backup_set)
         
         #一度もレイズされずbbに回った場合レイズする権利がある
-        if players[setting.turn].betting == setting.sb_value*2 and First_Flag == True:
+        if players[setting.turn].betting == setting.sb_value*2 and setting.first_bb == True:
             Redo_Flag = True
-            First_Flag = False
+            setting.set_first_bb(False)
 
         #何人残っているか確認する
         Redo_Flag = GetFunc.remain_count(Redo_Flag, players)
+
+        #終わってよいか確認する
+        if Redo_Flag == False:
+            Redo_Flag, players, setting, backup_play, backup_set = GetFunc.check_comfirm(Redo_Flag, players, setting, backup_play, backup_set)
+                
+
 
     #フロップに参加した人への処理
     for i in range(len(players)):
@@ -230,11 +256,17 @@ def common(players:List[infor.Player], setting:infor.Setting, phase_name:str)-> 
             setting.set_turn(i)
 
     Redo_Flag = True
+    backup_play = copy.deepcopy(players)
+    backup_set = copy.deepcopy(setting)
 
     while(Redo_Flag):
-        Redo_Flag, players, setting = run_poker(Redo_Flag, players, setting)
+        Redo_Flag, players, setting, backup_play, backup_set = run_poker(Redo_Flag, players, setting, backup_play, backup_set)
         #何人残っているか確認する
         Redo_Flag = GetFunc.remain_count(Redo_Flag, players)
+        #終わってよいか確認する
+        if Redo_Flag == False:
+            Redo_Flag, players, setting, backup_play, backup_set = GetFunc.check_comfirm(Redo_Flag, players, setting, backup_play, backup_set)
+
 
     return  clean_up_phase(players, setting) 
 

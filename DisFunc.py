@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 #プログラムの起動メッセージ
 def massege_start():
     print("#####################")
@@ -22,4 +24,7 @@ def result(players):
         print("Number of raise is              ",players[i].log_raise)
         print("Number of alli-in is            ",players[i].log_allin)
         print(players[i].log_cip)
+        plt.plot(players[i].log_cip, label = players[i].name)
         print("")
+    plt.legend()
+    plt.show()

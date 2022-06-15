@@ -26,6 +26,7 @@ class Setting():
         self.sb_value = None
         self.game_count = None
         self.turn = 0
+        self.first_bb = True
         self.turn_player_status = Status.Waiting
         self.call_need = 0
         self.raise_before = 0
@@ -38,6 +39,10 @@ class Setting():
     #現在のプレイヤーの添字を設定
     def set_turn(self, turn):
         self.turn = turn
+
+    #ファーストフラグを設定
+    def set_first_bb(self, status):
+        self.first_bb = status
 
     #現在のプレイヤーの状態を設定
     def set_turn_player_status(self, status):
@@ -76,6 +81,7 @@ class Setting():
     #ラウンドの後処理
     def cleanup_round(self):
         self.set_turn_player_status(Status.Waiting)
+        self.set_first_bb(True)
         self.set_turn(0)
         self.set_call_need(0)
         self.set_raise_before(0)

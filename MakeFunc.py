@@ -1,3 +1,4 @@
+from turtle import back
 from typing import List
 
 from sympy import N
@@ -97,9 +98,9 @@ def add_cip(players:List[infor.Player])->List[infor.Player]:
         print(players[numbet_select].name," added ",cip_addtional,"$.")
         print("You have ",players[numbet_select].cip,"$.")
 
-        print("Enter C to continue or Q to stop.")
-        entered_char = InFunc.cq_data()
-        if entered_char == "q":
+        print("If you want to add a cip, enter y/n..")
+        entered_char = InFunc.yn_data()
+        if entered_char == "y":
             Redo_Flag = False
 
     print("Cip setup is finished.")

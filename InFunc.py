@@ -24,33 +24,8 @@ def int_data()-> int:
 
     return value_int
 
-
-def cq_data()-> str:
-    """入力された文字がq,c判断する
-
-    Returns:
-        str:
-    """
-
-    Correct_Flag = True
-
-    while(Correct_Flag):
-
-        tmp_box = input()
-
-        if tmp_box == 'q':
-            value = 'q'
-            Correct_Flag = False
-        elif tmp_box == 'c':
-            value = 'c'
-            Correct_Flag = False
-        else:
-            print("Please enter Q of quit or C of contine.")
-
-    return value
-
-def ca_data()-> str:
-    """入力された文字がa,c判断する
+def yn_data()-> str:
+    """入力された文字がy,n判断する
 
     Returns:
         str:
@@ -62,14 +37,14 @@ def ca_data()-> str:
 
         tmp_box = input()
 
-        if tmp_box == 'c':
-            value = 'c'
+        if tmp_box == 'y':
+            value = 'y'
             Correct_Flag = False
-        elif tmp_box == 'a':
-            value = 'a'
+        elif tmp_box == 'n':
+            value = 'n'
             Correct_Flag = False
         else:
-            print("Please enter A of add or C of contine.")
+            print("Please enter y/n.")
 
     return value
 
@@ -200,8 +175,12 @@ def what_do(players:List[infor.Player], setting:infor.Setting)-> any:
             elif tmp_box == 'allin':
                 value = tmp_box
                 Correct_Flag = False
+            elif tmp_box == 'b':
+                value = tmp_box
+                Correct_Flag = False
             else:
                 print("Please enter the number or C of call")
-                print("or T of check or F of fold or allin.")
+                print("or T of check or F of fold or allin")
+                print("or B of Back Process.")
 
     return value
