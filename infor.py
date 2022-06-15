@@ -31,6 +31,7 @@ class Setting():
         self.call_need = 0
         self.raise_before = 0
         self.main_pot = 0
+        self.most_cip_ever = 100
 
     #betの最小単位を設定
     def set_sb_value(self, value):
@@ -43,6 +44,10 @@ class Setting():
     #ファーストフラグを設定
     def set_first_bb(self, status):
         self.first_bb = status
+
+    #過去一番多いチップ所持数を設定
+    def set_most_cip_ever(self, value):
+        self.most_cip_ever = value
 
     #現在のプレイヤーの状態を設定
     def set_turn_player_status(self, status):

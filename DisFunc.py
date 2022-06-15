@@ -10,21 +10,25 @@ def massege_start():
     print("")
 
 #結果を表示
-def result(players):
+def result(players, setting):
 
     print("#####################")
     print("RESULT")
     print("")
+
+    game_count = len(players[0].log_cip)-1
+    print("Count of game", game_count)
     
     for i in range(len(players)):
         print(players[i].name)
-        print("Chip is $",players[i].cip)
-        print("Number of wins is               ",players[i].log_win)
-        print("Number of players on the flop is",players[i].log_join)
+        print("Cip is $",players[i].cip)
+        print("Number of wins is               ",players[i].log_win," %",100*(players[i].log_win/game_count))
+        print("Number of players on the flop is",players[i].log_join," %",100*(players[i].log_join/game_count))
         print("Number of raise is              ",players[i].log_raise)
         print("Number of alli-in is            ",players[i].log_allin)
-        print(players[i].log_cip)
         plt.plot(players[i].log_cip, label = players[i].name)
         print("")
+
+    plt.grid()
     plt.legend()
     plt.show()

@@ -1,32 +1,63 @@
-田川
-100
-0
-0
-0
-0
-[0, 100, 100]
+Count of game
+4
 
-後田
-99
+name
+yoshida
+cip
+129
+win
+1
+join
+3
+raise
+3
+allin
 0
-0
-0
-0
-[0, 99, 99]
+cip_log
+[100, 93, 87, 85, 129]
 
-吉田
-100
+name
+ushirda
+cip
+131
+win
+2
+join
+3
+raise
+2
+allin
 1
-1
-0
-0
-[0, 101, 100]
+cip_log
+[100, 136, 130, 133, 131]
 
-梁池
-101
+name
+yanachi
+cip
+83
+win
 1
-1
+join
+3
+raise
+3
+allin
 0
+cip_log
+[100, 88, 104, 104, 83]
+
+name
+tagawa
+cip
+57
+win
 0
-[0, 100, 101]
+join
+3
+raise
+2
+allin
+0
+cip_log
+[100, 83, 79, 78, 57]
 

@@ -16,10 +16,10 @@ def main():
     setting = MakeFunc.setting_data(players)
 
     #ポーカーの管理をする
-    players = SysFunc.poker(players, setting)
+    players, setting = SysFunc.poker(players, setting)
 
     #結果を表示する
-    DisFunc.result(players)
+    DisFunc.result(players, setting)
 
     #結果をテキストファイルに出力する
     WriteFunc.result(players)

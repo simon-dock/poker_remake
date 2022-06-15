@@ -111,4 +111,4 @@ def poker(players: List[infor.Player], setting: infor.Setting)-> List[infor.Play
     print("GAME OVER")
     print("")
 
-    return players
+    return players, setting

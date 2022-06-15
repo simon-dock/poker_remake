@@ -219,7 +219,7 @@ def preflop(players:List[infor.Player], setting:infor.Setting)-> Tuple[List[info
 
     #フロップに参加した人への処理
     for i in range(len(players)):
-        if players[i].status != status.Folded:
+        if players[i].status != status.Folded and players[i].status != status.Blind and players[i].status != status.Waiting:
             players[i].add_log_join()
 
     #フェイズの後処理    
@@ -305,6 +305,9 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
         print("Winnner is",players[winner_index].name)
         print("Get pot $",setting.main_pot)
         players[winner_index].win(setting.main_pot)
+        #過去の誰よりも一番多くチップを多く持っていたら更新
+        if players[winner_index].cip > setting.most_cip_ever:
+            setting.set_most_cip_ever(players[winner_index].cip)
         
     #そうでない場合、showdownを行う
     else:
@@ -334,6 +337,9 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
                         fold_index[i] = 1
 
                 players[winner_index].win(pot)
+                #過去の誰よりも一番多くチップを多く持っていたら更新
+                if players[winner_index].cip > setting.most_cip_ever:
+                    setting.set_most_cip_ever(players[winner_index].cip)
                 print(players[winner_index].name," get $",pot)
                 if setting.main_pot == 0:
                     break
@@ -346,5 +352,8 @@ def showdwon_or_autowin(players:List[infor.Player], setting:infor.Setting)-> Tup
             print("Winnner is",players[winner_index].name)
             print("Get pot $",setting.main_pot)
             players[winner_index].win(setting.main_pot)
+            #過去の誰よりも一番多くチップを多く持っていたら更新
+            if players[winner_index].cip > setting.most_cip_ever:
+                setting.set_most_cip_ever(players[winner_index].cip)
 
     return clean_up_round(players, setting)

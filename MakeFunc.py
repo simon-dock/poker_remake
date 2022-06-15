@@ -58,8 +58,10 @@ def setting_data(players:List[infor.Player])-> infor.Setting:
     print("Enter the initial cip.")
 
     tmp_box = InFunc.int_data()
+    setting.set_most_cip_ever(tmp_box)
     for i in range(len(players)):
         players[i].set_cip(tmp_box)
+        players[i].log_cip[0] = tmp_box
 
     print("Initial cip is ", tmp_box)
     print("Game setup is finished.")
