@@ -1,9 +1,10 @@
 
 def result(players):
-    f = open('myfile.txt', 'w')
+    f = open('README.md', 'w')
 
     datalist = []
     game_count = len(players[0].log_cip)-1
+    datalist.append("# poker_remake\n")
     datalist.append("Count of game\n")
     datalist.append(str(game_count) +"\n")
     datalist.append("\n")
@@ -11,7 +12,7 @@ def result(players):
     
     datalist = []
     for i in range(len(players)):
-        datalist.append("name\n")
+        datalist.append("Name\n")
         datalist.append(players[i].name +"\n")
         datalist.append("cip\n")
         datalist.append(str(players[i].cip) +"\n")
