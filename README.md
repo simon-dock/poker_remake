@@ -2,8 +2,7 @@
 ## Count of game
 1
 
-### Name
-Tagawa
+### Tagawa
 cip
 110
 win
@@ -17,8 +16,7 @@ allin
 cip_log
 [100, 110]
 
-### Name
-Yanachi
+### Yanachi
 cip
 98
 win
@@ -32,8 +30,7 @@ allin
 cip_log
 [100, 98]
 
-### Name
-Ushiroda
+### Ushiroda
 cip
 98
 win
@@ -47,8 +44,7 @@ allin
 cip_log
 [100, 98]
 
-Name
-Namisaki
+### Namisaki
 cip
 98
 win
@@ -62,8 +58,7 @@ allin
 cip_log
 [100, 98]
 
-Name
-Yoshida
+### Yoshida
 cip
 98
 win
@@ -77,8 +72,7 @@ allin
 cip_log
 [100, 98]
 
-Name
-Nakayama
+### Nakayama
 cip
 98
 win
