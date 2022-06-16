@@ -3,21 +3,21 @@
 1
 
 ### Tagawa
-* The number of times you joined in the game.
+* The number of times you joined in the game.  
 0
 * Total of cip you have.  
 110
 $
-* The number of times you won & percentage.
+* The number of times you won & percentage.  
 1
 times ,200%
-* The number of times you joined in Preflop & percentage.
+* The number of times you joined in Preflop & percentage.  
 1
 times ,15%
-* The number of times you Raise.
+* The number of times you Raise.  
 0
 times
-* The number of times you Allin.
+* The number of times you Allin.  
 0
 times
 
