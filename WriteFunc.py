@@ -5,7 +5,7 @@ def result(players):
     datalist = []
     game_count = len(players[0].log_cip)-1
     datalist.append("# poker_remake\n")
-    datalist.append("Count of game\n")
+    datalist.append("## Count of game\n")
     datalist.append(str(game_count) +"\n")
     datalist.append("\n")
     f.writelines(datalist)

@@ -1,8 +1,8 @@
 # poker_remake
-Count of game
+## Count of game
 1
 
-Name
+### Name
 Tagawa
 cip
 110
@@ -17,7 +17,7 @@ allin
 cip_log
 [100, 110]
 
-Name
+### Name
 Yanachi
 cip
 98
@@ -32,7 +32,7 @@ allin
 cip_log
 [100, 98]
 
-Name
+### Name
 Ushiroda
 cip
 98
