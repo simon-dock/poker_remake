@@ -3,32 +3,28 @@
 1
 
 ### Tagawa
-cip
+* cip
 110
-win
+* win
 1
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
-[100, 110]
 
 ### Yanachi
-cip
+* cip
 98
-win
+* win
 0
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
-[100, 98]
 
 ### Ushiroda
 * cip
@@ -41,48 +37,40 @@ cip_log
 0
 * allin
 0
-* cip_log
-[100, 98]
 
 ### Namisaki
-cip
+* cip
 98
-win
+* win
 0
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
-[100, 98]
 
 ### Yoshida
-cip
+* cip
 98
-win
+* win
 0
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
-[100, 98]
 
 ### Nakayama
-cip
+* cip
 98
-win
+* win
 0
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
-[100, 98]
 
