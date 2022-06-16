@@ -3,15 +3,17 @@
 1
 
 ### Tagawa
-* cip
-110
-* win
-1
-* join
-1
-* raise
+* The number of times you joined in the game.
 0
-* allin
+* Total of cip you have.
+110
+* The number of times you won.
+1
+* The number of times you joined in Preflop.
+1
+* The number of times you Raise.
+0
+* The number of times you Allin.
 0
 
 ### Yanachi
