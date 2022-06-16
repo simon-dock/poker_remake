@@ -9,10 +9,10 @@
 110
 * The number of times you won & percentage.
 1
-200%
+,200%
 * The number of times you joined in Preflop & percentage.
 1
-15%
+,15%
 * The number of times you Raise.
 0
 * The number of times you Allin.
