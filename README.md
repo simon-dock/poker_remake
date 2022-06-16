@@ -5,7 +5,7 @@
 ### Tagawa
 * The number of times you joined in the game.
 0
-* Total of cip you have.
+* Total of cip you have.  
 110
 $
 * The number of times you won & percentage.
