@@ -7,16 +7,19 @@
 0
 * Total of cip you have.
 110
+$
 * The number of times you won & percentage.
 1
-,200%
+times ,200%
 * The number of times you joined in Preflop & percentage.
 1
-,15%
+times ,15%
 * The number of times you Raise.
 0
+times
 * The number of times you Allin.
 0
+times
 
 ### Yanachi
 * cip
