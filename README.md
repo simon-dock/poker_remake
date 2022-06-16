@@ -31,17 +31,17 @@ cip_log
 [100, 98]
 
 ### Ushiroda
-cip
+* cip
 98
-win
+* win
 0
-join
+* join
 1
-raise
+* raise
 0
-allin
+* allin
 0
-cip_log
+* cip_log
 [100, 98]
 
 ### Namisaki
