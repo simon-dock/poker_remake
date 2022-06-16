@@ -7,10 +7,12 @@
 0
 * Total of cip you have.
 110
-* The number of times you won.
+* The number of times you won & percentage.
 1
-* The number of times you joined in Preflop.
+200%
+* The number of times you joined in Preflop & percentage.
 1
+15%
 * The number of times you Raise.
 0
 * The number of times you Allin.
