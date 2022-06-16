@@ -22,8 +22,8 @@ def result(players, setting):
     for i in range(len(players)):
         print(players[i].name)
         print("Cip is $",players[i].cip)
-        print("Number of wins is               ",players[i].log_win," %",100*(players[i].log_win/game_count))
-        print("Number of players on the flop is",players[i].log_join," %",100*(players[i].log_join/game_count))
+        print("Number of wins is               ",players[i].log_win,", ",100*(players[i].log_win/game_count),"%")
+        print("Number of players on the flop is",players[i].log_join,", ",100*(players[i].log_join/game_count),"%")
         print("Number of raise is              ",players[i].log_raise)
         print("Number of alli-in is            ",players[i].log_allin)
         plt.plot(players[i].log_cip, label = players[i].name)

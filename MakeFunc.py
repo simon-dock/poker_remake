@@ -61,6 +61,7 @@ def setting_data(players:List[infor.Player])-> infor.Setting:
     setting.set_most_cip_ever(tmp_box)
     for i in range(len(players)):
         players[i].set_cip(tmp_box)
+        players[i].set_initial_cip(tmp_box)
         players[i].log_cip[0] = tmp_box
 
     print("Initial cip is ", tmp_box)
@@ -96,6 +97,7 @@ def add_cip(players:List[infor.Player])->List[infor.Player]:
         cip_addtional = InFunc.int_data()
 
         players[numbet_select].set_cip(players[numbet_select].cip+cip_addtional)
+        players[numbet_select].set_initial_cip(players[numbet_select].initial_cip+cip_addtional)
 
         print(players[numbet_select].name," added ",cip_addtional,"$.")
         print("You have ",players[numbet_select].cip,"$.")

@@ -1,63 +1,125 @@
-Count of game
-4
-
-name
-yoshida
-cip
-129
-win
-1
-join
+# poker_remake
+## Count of game
 3
-raise
-3
-allin
-0
-cip_log
-[100, 93, 87, 85, 129]
+times
 
-name
-ushirda
-cip
-131
-win
+### Ushiroda
+* The number of times you joined in the game.  
 2
-join
-3
-raise
+times
+* Total of cip you have.  
+964
+$
+* The number of times you won & percentage.  
+0
+times, 0.0%
+* The number of times you joined in Preflop & percentage.  
 2
-allin
-1
-cip_log
-[100, 136, 130, 133, 131]
-
-name
-yanachi
-cip
-83
-win
-1
-join
+times, 100.0%
+* The number of times you Raise.  
 3
-raise
-3
-allin
+times
+* The number of times you Allin.  
 0
-cip_log
-[100, 88, 104, 104, 83]
+times
 
-name
-tagawa
-cip
-57
-win
-0
-join
-3
-raise
+### Tagawa
+* The number of times you joined in the game.  
 2
-allin
+times
+* Total of cip you have.  
+1077
+$
+* The number of times you won & percentage.  
+2
+times, 100.0%
+* The number of times you joined in Preflop & percentage.  
+2
+times, 100.0%
+* The number of times you Raise.  
+2
+times
+* The number of times you Allin.  
 0
-cip_log
-[100, 83, 79, 78, 57]
+times
+
+### Yanachi
+* The number of times you joined in the game.  
+2
+times
+* Total of cip you have.  
+959
+$
+* The number of times you won & percentage.  
+0
+times, 0.0%
+* The number of times you joined in Preflop & percentage.  
+2
+times, 100.0%
+* The number of times you Raise.  
+0
+times
+* The number of times you Allin.  
+0
+times
+
+### Namisaki
+* The number of times you joined in the game.  
+0
+times
+* Total of cip you have.  
+1000
+$
+* The number of times you won & percentage.  
+0
+times, 0%
+* The number of times you joined in Preflop & percentage.  
+0
+times, 0%
+* The number of times you Raise.  
+0
+times
+* The number of times you Allin.  
+0
+times
+
+### Yoshida
+* The number of times you joined in the game.  
+0
+times
+* Total of cip you have.  
+1000
+$
+* The number of times you won & percentage.  
+0
+times, 0%
+* The number of times you joined in Preflop & percentage.  
+0
+times, 0%
+* The number of times you Raise.  
+0
+times
+* The number of times you Allin.  
+0
+times
+
+### Nakayama
+* The number of times you joined in the game.  
+0
+times
+* Total of cip you have.  
+1000
+$
+* The number of times you won & percentage.  
+0
+times, 0%
+* The number of times you joined in Preflop & percentage.  
+0
+times, 0%
+* The number of times you Raise.  
+0
+times
+* The number of times you Allin.  
+0
+times
 

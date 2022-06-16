@@ -101,6 +101,7 @@ class Player():
         self.status = Status.Waiting
         self.position = None
         self.betting = 0
+        self.initial_cip = 0
         self.cip = 0
         self.log_win = 0
         self.log_join = 0
@@ -136,6 +137,10 @@ class Player():
     #持ち金を設定する
     def set_cip(self,value):
         self.cip = value
+
+    #投資したcipを設定する
+    def set_initial_cip(self, value):
+        self.initial_cip = value
 
     #log_raiseのカウントを増やす
     def add_log_raise(self):

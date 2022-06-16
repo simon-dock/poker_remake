@@ -1,49 +1,20 @@
-f = open('myfile.txt', 'r')
+f = open('README.md', 'r')
 
 datalist = []
+count = 0
 while True:
-  data = f.readline()
-  if data == '':
+  raw_data = f.readline()
+  if raw_data == '':
     break
-  print (data.rstrip('\n'))
-  datalist.append(data)
+  data = raw_data.rstrip('\n')
+  if data.isnumeric():
+    tmp_box = int(data)
+    datalist.append(tmp_box)
+  if count % 20 == 5:
+    tmp_box = data.split()
+    datalist.append(tmp_box[1])
+  count += 1
 
 print(datalist)
-print(type(datalist))
-print(type(datalist[1]))
-
-f.close()
-
-f = open('myfile.txt', 'w')
-
-datalist = []
-game_count = 4
-datalist.append("# poker_remake\n")
-datalist.append("## Count of game\n")
-datalist.append(str(game_count) +"\n")
-datalist.append("\n")
-f.writelines(datalist)
-
-datalist = []
-for i in range(4):
-  datalist.append("Name\n")
-  datalist.append(str(i)+"\n")
-  datalist.append("cip\n")
-  datalist.append(str(i) +"\n")
-  datalist.append("win\n")
-  datalist.append(str(i) +"\n")
-  datalist.append("join\n")
-  datalist.append(str(i) +"\n")
-  datalist.append("raise\n")
-  datalist.append(str(i) +"\n")
-  datalist.append("allin\n")
-  datalist.append(str(i) +"\n")
-  datalist.append("cip_log\n")
-  datalist.append(str(i) +"\n")
-  tmp = "\n"
-  datalist.append(tmp)
-  
-    
-f.writelines(datalist)
 
 f.close()
