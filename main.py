@@ -3,7 +3,7 @@ import MakeFunc
 import SysFunc
 import WriteFunc
 import infor
-
+##
 def main():
 
     #プログラムの起動メッセージ

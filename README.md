@@ -1,86 +1,106 @@
 # poker_remake
 ## Count of game
-159
-times
-
-### Tagawa
-* The number of times you joined in the game.  
-158
-times
-* Total of cip you have.  
-705
-$
-* The number of times you won & percentage.  
-43
-times, 27.21518987341772%
-* The number of times you joined in Preflop & percentage.  
-105
-times, 66.45569620253164%
-* The number of times you Raise.  
-119
-times
-* The number of times you Allin.  
-5
+185
 times
 
 ### Ushiroda
 * The number of times you joined in the game.  
-158
+184
 times
 * Total of cip you have.  
-987
+783
 $
 * The number of times you won & percentage.  
-31
-times, 19.62025316455696%
+36
+times, 19.565217391304348%
 * The number of times you joined in Preflop & percentage.  
-92
-times, 58.22784810126582%
+111
+times, 60.32608695652174%
 * The number of times you Raise.  
-85
+95
 times
 * The number of times you Allin.  
-1
+3
 times
 
-### Yoshida
+### Tagawa
 * The number of times you joined in the game.  
-158
+184
 times
 * Total of cip you have.  
-1233
+900
 $
 * The number of times you won & percentage.  
-31
-times, 19.62025316455696%
+51
+times, 27.717391304347828%
 * The number of times you joined in Preflop & percentage.  
-96
-times, 60.75949367088608%
+122
+times, 66.30434782608695%
 * The number of times you Raise.  
-24
+134
 times
 * The number of times you Allin.  
-1
+8
 times
 
 ### Namisaki
 * The number of times you joined in the game.  
-84
+110
 times
 * Total of cip you have.  
-991
+944
 $
 * The number of times you won & percentage.  
-17
-times, 20.238095238095237%
+21
+times, 19.090909090909093%
 * The number of times you joined in Preflop & percentage.  
-60
-times, 71.42857142857143%
+82
+times, 74.54545454545455%
 * The number of times you Raise.  
-25
+30
 times
 * The number of times you Allin.  
 2
+times
+
+### Yoshida
+* The number of times you joined in the game.  
+184
+times
+* Total of cip you have.  
+1313
+$
+* The number of times you won & percentage.  
+35
+times, 19.021739130434785%
+* The number of times you joined in Preflop & percentage.  
+111
+times, 60.32608695652174%
+* The number of times you Raise.  
+26
+times
+* The number of times you Allin.  
+2
+times
+
+### Yanachi
+* The number of times you joined in the game.  
+100
+times
+* Total of cip you have.  
+1101
+$
+* The number of times you won & percentage.  
+34
+times, 34.0%
+* The number of times you joined in Preflop & percentage.  
+75
+times, 75.0%
+* The number of times you Raise.  
+59
+times
+* The number of times you Allin.  
+0
 times
 
 ### Nakayama
@@ -98,26 +118,6 @@ times, 35.0%
 times, 90.0%
 * The number of times you Raise.  
 3
-times
-* The number of times you Allin.  
-0
-times
-
-### Yanachi
-* The number of times you joined in the game.  
-74
-times
-* Total of cip you have.  
-1125
-$
-* The number of times you won & percentage.  
-29
-times, 39.189189189189186%
-* The number of times you joined in Preflop & percentage.  
-56
-times, 75.67567567567568%
-* The number of times you Raise.  
-49
 times
 * The number of times you Allin.  
 0
