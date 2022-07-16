@@ -8,7 +8,7 @@ times
 184
 times
 * Total of cip you have.  
-783
+663
 $
 * The number of times you won & percentage.  
 36
@@ -28,7 +28,7 @@ times
 184
 times
 * Total of cip you have.  
-900
+912
 $
 * The number of times you won & percentage.  
 51
@@ -68,7 +68,7 @@ times
 184
 times
 * Total of cip you have.  
-1313
+1215
 $
 * The number of times you won & percentage.  
 35
@@ -88,7 +88,7 @@ times
 100
 times
 * Total of cip you have.  
-1101
+1323
 $
 * The number of times you won & percentage.  
 34
@@ -108,7 +108,7 @@ times
 20
 times
 * Total of cip you have.  
-970
+943
 $
 * The number of times you won & percentage.  
 7
